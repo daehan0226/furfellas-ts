@@ -1,11 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
 
-// interface TodoListProps {
-//   items: { id: string; text: string }[];
-//   onDeleteTodo: (id: string) => void;
-// }
-
 const Spacer = styled.div`
   height: 80px;
   ${({ theme }) => theme.media.desktop`
@@ -31,7 +26,7 @@ const Title = styled.h1`
   margin-bottom: 0px;
 `;
 
-const TodoList: React.FC<any> = props => {
+const Header: React.FC = () => {
     return (
         <>
             <Container>
@@ -44,4 +39,4 @@ const TodoList: React.FC<any> = props => {
     );
 };
 
-export default TodoList;
+export default Header;
