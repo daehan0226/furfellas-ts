@@ -22,7 +22,7 @@ class MainApi extends HttpClient {
 
     public getPet = (id: string) => this.instance.get<Pet>(`pets/${id}`);
 
-    public getTodos = () => this.instance.get<any, GetTodoResponse>('todos/');
+    public getTodos = (queryParams: string) => this.instance.get<any, GetTodoResponse>(`todos/?${queryParams}`);
 }
 
 export default MainApi
