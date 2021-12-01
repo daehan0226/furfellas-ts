@@ -1,5 +1,5 @@
 import HttpClient from './http-client';
-import { Pet } from '../models';
+import { Pet, Todo } from '../models';
 
 
 type GetPetResponse = {
@@ -7,9 +7,11 @@ type GetPetResponse = {
     message: "Success" | "Fail";
 };
 
-type test = {
-    id: number
-}
+type GetTodoResponse = {
+    result: Todo[];
+    message: "Success" | "Fail";
+};
+
 
 class MainApi extends HttpClient {
     public constructor() {
@@ -19,6 +21,8 @@ class MainApi extends HttpClient {
     public getPets = () => this.instance.get<any, GetPetResponse>('pets/');
 
     public getPet = (id: string) => this.instance.get<Pet>(`pets/${id}`);
+
+    public getTodos = () => this.instance.get<any, GetTodoResponse>('todos/');
 }
 
 export default MainApi

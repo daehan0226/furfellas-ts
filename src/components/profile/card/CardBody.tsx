@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Pet } from "../../../models"
 // import { FlexCenterBox } from "../../styles/common-styles";
 // import { changeToDisplayStringDatetime } from "../../utils/utils";
 
@@ -26,15 +27,7 @@ const Image = styled.img`
 `;
 
 interface CardBodyProps {
-  data: {
-    birthday: string,
-    weight: number,
-    intro: string,
-    photo?: {
-      id: number,
-      url: string
-    }
-  }
+  data: Pet
 }
 
 
@@ -47,7 +40,7 @@ const CardBody: React.FC<CardBodyProps> = ({ data }) => {
         <h6>{data.intro}</h6>
       </Wrapper>
       <ImageWrapper>
-        {/* <Image src={data.photo.url} alt={`${data.name}'s photo`} /> */}
+        <Image src={data.photo.url} alt={`${data.name}'s photo`} />
       </ImageWrapper>
     </Container>
   );

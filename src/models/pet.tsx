@@ -5,7 +5,7 @@ export default interface Pet {
     weight: number,
     name: string,
     intro: string,
-    photo?: {
+    photo: {
         id: number,
         url: string
     }

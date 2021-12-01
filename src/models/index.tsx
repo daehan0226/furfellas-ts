@@ -1,3 +1,4 @@
 import Pet from "./pet";
+import Todo from "./todo";
 
-export type { Pet }
+export type { Pet, Todo }
