@@ -30,7 +30,8 @@ interface CardBodyProps {
     birthday: string,
     weight: number,
     intro: string,
-    photo: {
+    photo?: {
+      id: number,
       url: string
     }
   }

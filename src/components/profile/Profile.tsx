@@ -1,43 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { Card } from "./card";
 import { Pet } from "../../models"
-
-const petdb = [{
-    title: "1",
-    birthday: "2021-12-01",
-    weight: 15,
-    name: "test",
-    intro: 'zzz',
-    photo: {
-        id: 1,
-        url: ''
-    }
-},
-{
-    title: "1",
-    birthday: "2021-12-01",
-    weight: 15,
-    name: "test",
-    intro: 'zzz',
-    photo: {
-        id: 1,
-        url: ''
-    }
-}
-]
+import { MainApi } from '../../ApiService';
 
 
 const Profile: React.FC = () => {
     const [pets, setPets] = useState<Pet[]>([]);
 
+    const fetchPets = async () => {
+        const api = new MainApi()
+        const petData = await api.getPets()
+        setPets([...petData.result])
+    }
+
     useEffect(() => {
-        setPets([...petdb])
+        fetchPets()
     }, [])
 
     return (
         <>
             {pets.map(pet => (
-                <Card data={pet} />
+                <Card key={pet.id} data={pet} />
             ))}
         </>
     );
