@@ -15,7 +15,7 @@ const FilterContainer = styled.div`
 const DateSelectContainer = styled.div`
 `;
 
-type IDisplayType = string // 'slide' | 'gallery'
+type IDisplayType = 'slide' | 'gallery'
 
 const Header: React.FC = () => {
     const [selectedItems, setSelectedItems] = useState({
@@ -38,10 +38,6 @@ const Header: React.FC = () => {
         const photoData = await api.getPhotos(params)
         console.log(photoData);
     }
-
-    useEffect(() => {
-        console.log(displayType)
-    }, [displayType])
 
     useEffect(() => {
         const params = createQueryParams({
@@ -68,7 +64,7 @@ const Header: React.FC = () => {
         })
     }
 
-    const handleTypeChange = (value: string) => {
+    const handleTypeChange = (value: IDisplayType) => {
         setDisplayType(value)
     }
 
