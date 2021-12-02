@@ -4,40 +4,60 @@ import { MainApi } from "../ApiService";
 import { Location } from "../models"
 
 
-type State = Location[]
+type State = {
+  items: Location[]
+}
 
 type Action =
   | { type: 'SET'; payload: { items: Location[] } }
-  | { type: 'ADD'; payload: { name: string } }
+  | { type: 'ADD'; payload: { id: number, name: string } }
   | { type: 'UPDATE'; payload: { id: number, name: string } }
   | { type: 'DELETE'; payload: { id: number } };
 
 type LocationDispatch = Dispatch<Action>;
 
-const LocationStateContext = createContext<State>([]);
+const LocationStateContext = createContext<State>({ items: [] });
 const LocationDispatchContext = createContext<LocationDispatch>(() => null);
 
+// 리듀서 액션 함수들 따로 만들기?
+// api call status에 따라 타입 결정
+// 더 좋은 방법 있는지 찾아보기
 function reducer(state: State, action: Action): State {
   switch (action.type) {
     case 'SET':
-      return [...action.payload.items]
+      return { items: [...state.items, ...action.payload.items] }
     case 'ADD':
       return {
-        ...state
+        items: [...state.items, action.payload]
       };
     case 'UPDATE':
       return {
-        ...state
+        items: [...state.items.map(item => {
+          if (item.id !== action.payload.id) {
+            return item
+          } else {
+            return action.payload
+          }
+        })]
       };
     case 'DELETE':
-      return [...state.filter(item => item.id !== action.payload.id)];
+      return { items: [...state.items.filter(item => item.id !== action.payload.id)] };
     default:
       throw new Error('Unhandled action');
   }
 }
 
+export const getLocations = (dispatch: Dispatch<Action>) => {
+  // fetch_todos().then((data) =>
+  //   dispatch({
+  //     type: "POPULATE",
+  //     payload: data
+  //   })
+  // );
+};
+
 export function LocationContextProvider({ children }: { children: React.ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, []);
+  const [state, dispatch] = useReducer(reducer, { items: [] });
 
   const refresh = async () => {
     const api = new MainApi()

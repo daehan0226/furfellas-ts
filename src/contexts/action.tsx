@@ -1,21 +1,59 @@
-import React, { createContext, useEffect, useContext, useState } from "react";
+import React, { createContext, useEffect, useContext, Dispatch, useReducer, } from "react";
 import { MainApi } from "../ApiService";
-import { Action } from "../models"
+import { Action as IAction } from "../models"
 
-interface AppContextInterface {
-  data: Action[],
-  refresh: () => void
+
+type State = {
+  items: IAction[]
 }
 
-const ActionContext = createContext<AppContextInterface | null>(null);
+type Action =
+  | { type: 'SET'; payload: { items: IAction[] } }
+  | { type: 'ADD'; payload: { id: number, name: string } }
+  | { type: 'UPDATE'; payload: { id: number, name: string } }
+  | { type: 'DELETE'; payload: { id: number } };
 
-export const ActionContextProvider: React.FC = (props) => {
-  const [data, setData] = useState<Action[]>([]);
+type ActionDispatch = Dispatch<Action>;
+
+const ActionStateContext = createContext<State>({ items: [] });
+const ActionDispatchContext = createContext<ActionDispatch>(() => null);
+
+// 리듀서 액션 함수들 따로 만들기?
+// api call status에 따라 타입 결정
+// 더 좋은 방법 있는지 찾아보기
+function reducer(state: State, action: Action): State {
+  switch (action.type) {
+    case 'SET':
+      return { items: [...state.items, ...action.payload.items] }
+    case 'ADD':
+      return {
+        items: [...state.items, action.payload]
+      };
+    case 'UPDATE':
+      return {
+        items: [...state.items.map(item => {
+          if (item.id !== action.payload.id) {
+            return item
+          } else {
+            return action.payload
+          }
+        })]
+      };
+    case 'DELETE':
+      return { items: [...state.items.filter(item => item.id !== action.payload.id)] };
+    default:
+      throw new Error('Unhandled action');
+  }
+}
+
+
+export function ActionContextProvider({ children }: { children: React.ReactNode }) {
+  const [state, dispatch] = useReducer(reducer, { items: [] });
 
   const refresh = async () => {
     const api = new MainApi()
     const actionData = await api.getActions()
-    setData([...actionData.result])
+    dispatch({ type: 'SET', payload: { items: actionData.result } })
   };
 
   useEffect(() => {
@@ -23,12 +61,24 @@ export const ActionContextProvider: React.FC = (props) => {
   }, []);
 
   return (
-    <ActionContext.Provider value={{ data, refresh }}>
-      {props.children}
-    </ActionContext.Provider>
+    <ActionStateContext.Provider value={state}>
+      <ActionDispatchContext.Provider value={dispatch}>
+        {children}
+      </ActionDispatchContext.Provider>
+    </ActionStateContext.Provider>
   );
-};
+}
 
-export const useAction = () => {
-  return useContext(ActionContext);
-};
+// state 와 dispatch 를 쉽게 사용하기 위한 커스텀 Hooks
+export function useActionState(): State {
+  const state = useContext(ActionStateContext);
+  if (!state) throw new Error('Cannot find actionProvider');
+  return state;
+}
+
+export function useActionDispatch(): ActionDispatch {
+  const dispatch = useContext(ActionDispatchContext);
+  if (!dispatch) throw new Error('Cannot find actionProvider');
+  return dispatch;
+}
+// https://react.vlpt.us/using-typescript/04-ts-context.html

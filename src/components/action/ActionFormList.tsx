@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { ActionForm } from ".";
-import { useAction } from "../../contexts";
+import { useActionState } from "../../contexts";
 
 
 const Container = styled.div`
@@ -16,13 +16,14 @@ const initialActionValue = {
 
 const ActionFormList: React.FC = () => {
     const [editKey, setEditKey] = useState<IEditKey>(null);
-    const actions = useAction();
+
+    const actionState = useActionState();
 
     return (
         <Container>
             <button onClick={() => { setEditKey(0) }} >New Action</button>
             {editKey === 0 && <ActionForm data={initialActionValue} />}
-            {actions && actions.data.map((action) => (
+            {actionState.items && actionState.items.map((action) => (
                 <div>
                     {editKey === action.id ? (
                         <ActionForm data={action} />

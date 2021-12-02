@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
-import { useAction, useLocationDispatch, useLocationState, usePet } from '../../contexts';
+import { useActionState, useLocationState, usePet } from '../../contexts';
 import { createQueryParams, getCurrentStringDate, strfDatetime, addMonthToCurrentDate } from '../../utils/utils';
 import { TagSelect, DateSelect } from '../common/select';
 import { MainApi } from '../../ApiService';
@@ -29,7 +29,7 @@ const Header: React.FC = () => {
     })
     const [displayType, setDisplayType] = useState<IDisplayType>('slide')
 
-    const actions = useAction();
+    const actionState = useActionState();
     const locationState = useLocationState();
     const pets = usePet();
 
@@ -72,8 +72,8 @@ const Header: React.FC = () => {
     return (
         <Container>
             <FilterContainer>
-                <TagSelect placeholder="Choose actions" onChange={(data) => handleSelectedItemChange("actions", data)} options={actions ? actions.data : []} />
-                <TagSelect placeholder="Choose locations" onChange={(data) => handleSelectedItemChange("locations", data)} options={locationState.length > 0 ? locationState : []} />
+                <TagSelect placeholder="Choose actions" onChange={(data) => handleSelectedItemChange("actions", data)} options={actionState.items.length > 0 ? actionState.items : []} />
+                <TagSelect placeholder="Choose locations" onChange={(data) => handleSelectedItemChange("locations", data)} options={locationState.items.length > 0 ? locationState.items : []} />
                 <TagSelect placeholder="Choose pets" onChange={(data) => handleSelectedItemChange("pets", data)} options={pets ? pets.data : []} />
             </FilterContainer>
             <DateSelectContainer>
