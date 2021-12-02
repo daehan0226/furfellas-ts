@@ -29,3 +29,10 @@ export const addMonthToCurrentDate = (months: number): Date => {
 export const strfDatetime = (datetime: Date): string => {
     return datetime.getFullYear() + '-' + (datetime.getMonth() + 1) + '-' + datetime.getDate();
 }
+
+export const createQueryParams = (params: { [k: string]: string | number }) => {
+    return Object.keys(params)
+        .map((k) => encodeURIComponent(k) + "=" + encodeURIComponent(params[k]))
+        .join("&");
+};
+

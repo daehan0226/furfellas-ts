@@ -1,5 +1,5 @@
 import HttpClient from './http-client';
-import { Pet, Todo, Action, Location } from '../models';
+import { Pet, Todo, Action, Location, User } from '../models';
 
 
 type GetActionResponse = {
@@ -22,6 +22,19 @@ type GetTodoResponse = {
     message: "Success" | "Fail";
 };
 
+interface GetPhotoResponse {
+    id: number;
+    action: Action[];
+    create_datetime: string;
+    description: string;
+    image_id: string;
+    location: Location;
+    original: string;
+    pets: Pet[];
+    thumbnail: string;
+    upload_datetime: string;
+    user: User
+}
 
 class MainApi extends HttpClient {
     public constructor() {
@@ -31,6 +44,7 @@ class MainApi extends HttpClient {
     public getPets = () => this.instance.get<any, GetPetResponse>('pets/');
     public getActions = () => this.instance.get<any, GetActionResponse>('actions/');
     public getLocations = () => this.instance.get<any, GetLocationResponse>('locations/');
+    public getPhotos = (queryParams: string) => this.instance.get<any, GetPhotoResponse>(`photos/?${queryParams}`);
 
     public getPet = (id: string) => this.instance.get<Pet>(`pets/${id}`);
 
