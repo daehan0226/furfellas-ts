@@ -1,14 +1,13 @@
 import { useState } from "react";
 import styled from "styled-components";
-
+import { MainApi } from "../../ApiService";
+import { useActionDispatch } from "../../contexts";
+import { Action as IAction } from "../../models";
+import { createQueryParams } from "../../utils/utils";
 
 const Container = styled.div`
 `;
 
-interface IAction {
-    id: number;
-    name: string;
-}
 
 interface ActionFormProps {
     data?: IAction
@@ -17,12 +16,33 @@ interface ActionFormProps {
 const ActionForm: React.FC<ActionFormProps> = ({ data }) => {
     const [value, setValue] = useState<string>(data?.name || "");
 
+    const actionDispatch = useActionDispatch();
+
+    const handleAddAction = async (name: string) => {
+        const api = new MainApi()
+        const response = await api.addAction(createQueryParams({ name }))
+        actionDispatch({ type: 'ADD', payload: { id: response.result, name: value } })
+    }
+
+    const handleUpdateAction = async (id: number, name: string) => {
+        const api = new MainApi()
+        const result = await api.addAction(createQueryParams({ name }))
+        console.log(result)
+        // actionDispatch({ type: 'UPDATE', payload: { id: data.id, name: value } })
+    }
+
+
     const handleSubmit = () => {
-        console.log("handleSubmit", data?.id, value)
+        if (data && data.id) {
+            handleUpdateAction(data.id, value)
+        } else {
+            handleAddAction(value);
+        }
     }
 
     const handleCancel = () => {
         console.log("handleCancel", data?.id, value)
+
     }
 
     return (

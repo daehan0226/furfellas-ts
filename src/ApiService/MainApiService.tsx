@@ -7,6 +7,11 @@ type GetActionResponse = {
     message: "Success" | "Fail";
 };
 
+type AddActionResponse = {
+    result: number;
+    message: "CREATED" | "No permission" | "Fail"
+};
+
 type GetLocationResponse = {
     result: Location[];
     message: "Success" | "Fail";
@@ -45,6 +50,8 @@ class MainApi extends HttpClient {
     public getActions = () => this.instance.get<any, GetActionResponse>('actions/');
     public getLocations = () => this.instance.get<any, GetLocationResponse>('locations/');
     public getPhotos = (queryParams: string) => this.instance.get<any, GetPhotoResponse>(`photos/?${queryParams}`);
+
+    public addAction = (queryParams: string) => this.instance.post<any, AddActionResponse>(`actions/?${queryParams}`);
 
     public getPet = (id: string) => this.instance.get<Pet>(`pets/${id}`);
 

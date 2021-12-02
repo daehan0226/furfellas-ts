@@ -18,16 +18,13 @@ type ActionDispatch = Dispatch<Action>;
 const ActionStateContext = createContext<State>({ items: [] });
 const ActionDispatchContext = createContext<ActionDispatch>(() => null);
 
-// 리듀서 액션 함수들 따로 만들기?
-// api call status에 따라 타입 결정
-// 더 좋은 방법 있는지 찾아보기
 function reducer(state: State, action: Action): State {
   switch (action.type) {
     case 'SET':
       return { items: [...state.items, ...action.payload.items] }
     case 'ADD':
       return {
-        items: [...state.items, action.payload]
+        items: [action.payload, ...state.items,]
       };
     case 'UPDATE':
       return {
@@ -69,7 +66,6 @@ export function ActionContextProvider({ children }: { children: React.ReactNode 
   );
 }
 
-// state 와 dispatch 를 쉽게 사용하기 위한 커스텀 Hooks
 export function useActionState(): State {
   const state = useContext(ActionStateContext);
   if (!state) throw new Error('Cannot find actionProvider');
@@ -81,4 +77,3 @@ export function useActionDispatch(): ActionDispatch {
   if (!dispatch) throw new Error('Cannot find actionProvider');
   return dispatch;
 }
-// https://react.vlpt.us/using-typescript/04-ts-context.html
