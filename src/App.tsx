@@ -6,7 +6,22 @@ import { Profile } from './components/profile';
 import { Gallery } from './components/gallery';
 import { TodoTable } from './components/todo';
 
-function App() {
+import { LocationContextProvider, ActionContextProvider, PetContextProvider } from './contexts';
+
+
+function withContext<T>(Component: React.ComponentType<T>) {
+  return (props: T) => (
+    <LocationContextProvider>
+      <ActionContextProvider>
+        <PetContextProvider>
+          <Component {...props} />
+        </PetContextProvider>
+      </ActionContextProvider>
+    </LocationContextProvider>
+  );
+}
+
+const App: React.FC = () => {
   return (
     <div className="App">
       <Header></Header>
@@ -17,4 +32,4 @@ function App() {
   );
 }
 
-export default App;
+export default withContext(App);
