@@ -4,6 +4,7 @@ import { useAction, useLocation, usePet } from '../../contexts';
 import { createQueryParams, getCurrentStringDate, strfDatetime, addMonthToCurrentDate } from '../../utils/utils';
 import { TagSelect, DateSelect } from '../common/select';
 import { MainApi } from '../../ApiService';
+import { Radio } from 'antd';
 
 const Container = styled.div`
 `;
@@ -13,6 +14,8 @@ const FilterContainer = styled.div`
 
 const DateSelectContainer = styled.div`
 `;
+
+type IDisplayType = string // 'slide' | 'gallery'
 
 const Header: React.FC = () => {
     const [selectedItems, setSelectedItems] = useState({
@@ -24,6 +27,7 @@ const Header: React.FC = () => {
         begin: strfDatetime(addMonthToCurrentDate(-1)),
         end: getCurrentStringDate()
     })
+    const [displayType, setDisplayType] = useState<IDisplayType>('slide')
 
     const actions = useAction();
     const locations = useLocation();
@@ -34,6 +38,10 @@ const Header: React.FC = () => {
         const photoData = await api.getPhotos(params)
         console.log(photoData);
     }
+
+    useEffect(() => {
+        console.log(displayType)
+    }, [displayType])
 
     useEffect(() => {
         const params = createQueryParams({
@@ -60,6 +68,10 @@ const Header: React.FC = () => {
         })
     }
 
+    const handleTypeChange = (value: string) => {
+        setDisplayType(value)
+    }
+
     return (
         <Container>
             <FilterContainer>
@@ -71,6 +83,13 @@ const Header: React.FC = () => {
                 <DateSelect title="Start Date" date={dateInfo.begin} setDate={(date) => handleSelectedDateChange("begin", date)} />
                 <DateSelect title="End Date" date={dateInfo.end} setDate={(date) => handleSelectedDateChange("end", date)} />
             </DateSelectContainer>
+
+            <>
+                <Radio.Group defaultValue="slide" buttonStyle="solid" onChange={(e) => handleTypeChange(e.target.value)} >
+                    <Radio.Button value="slide">Slide</Radio.Button>
+                    <Radio.Button value="gallery">Gallery</Radio.Button>
+                </Radio.Group>
+            </>
         </Container>
     );
 };
