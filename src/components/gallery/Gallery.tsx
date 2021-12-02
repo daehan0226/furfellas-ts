@@ -65,6 +65,7 @@ const Header: React.FC = () => {
     }
 
     const handleTypeChange = (value: IDisplayType) => {
+        console.log(value)
         setDisplayType(value)
     }
 

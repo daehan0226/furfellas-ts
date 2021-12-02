@@ -1,15 +1,14 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 import './App.css';
 import './styles/styles.css';
 import { Header } from "./components/common"
-import { Profile } from './components/profile';
-import { Gallery } from './components/gallery';
-import { TodoTable } from './components/todo';
+import { Home, Admin } from "./pages"
 
 import { LocationContextProvider, ActionContextProvider, PetContextProvider } from './contexts';
 
 
-function withContext<T>(Component: React.ComponentType<T>) {
+const withContext = <T,>(Component: React.ComponentType<T>) => {
   return (props: T) => (
     <LocationContextProvider>
       <ActionContextProvider>
@@ -23,12 +22,17 @@ function withContext<T>(Component: React.ComponentType<T>) {
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <Header></Header>
-      <Profile />
-      <TodoTable />
-      <Gallery />
-    </div>
+    <Router>
+      <div className="App">
+        <Header></Header>
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route exact path="/admin" component={Admin} />
+
+          <Redirect path="*" to="/" />
+        </Switch>
+      </div>
+    </Router>
   );
 }
 
