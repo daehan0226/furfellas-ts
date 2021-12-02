@@ -35,7 +35,7 @@ const columns: any = [
 
 const TodoTable: React.FC = () => {
     const [todos, setTodos] = useState<Todo[]>([]);
-    const [datetiemBegin, setDatetiemBegin] = useState<string>(getCurrentStringDate());
+    const [datetimeBegin, setDatetimeBegin] = useState<string>(getCurrentStringDate());
     const [datetimeEnd, setDatetimeEnd] = useState<string>(strfDatetime(addMonthToCurrentDate(1)));
 
     useEffect(() => {
@@ -44,11 +44,11 @@ const TodoTable: React.FC = () => {
 
     useEffect(() => {
         fetchTodos()
-    }, [datetiemBegin, datetimeEnd])
+    }, [datetimeBegin, datetimeEnd])
 
     const fetchTodos = async () => {
         const api = new MainApi()
-        const todoData = await api.getTodos(`datetime_from=${datetiemBegin}&datetime_to=${datetimeEnd}`)
+        const todoData = await api.getTodos(`datetime_from=${datetimeBegin}&datetime_to=${datetimeEnd}`)
         setTodos([...todoData.result])
     }
 
@@ -59,7 +59,7 @@ const TodoTable: React.FC = () => {
     return (
         <Container>
             <DateContainer>
-                <DateSelect title="Start Date" date={datetiemBegin} setDate={setDatetiemBegin} />
+                <DateSelect title="Start Date" date={datetimeBegin} setDate={setDatetimeBegin} />
                 <DateSelect title="End Date" date={datetimeEnd} setDate={setDatetimeEnd} />
             </DateContainer>
             <Table
