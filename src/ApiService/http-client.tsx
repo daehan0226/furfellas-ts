@@ -1,4 +1,10 @@
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import axios, { AxiosInstance, AxiosResponse, HeadersDefaults } from 'axios';
+import Cookies from "universal-cookie";
+
+interface CommonHeaderProperties extends HeadersDefaults {
+    Authorization?: string;
+}
+
 
 declare module 'axios' {
     interface AxiosResponse<T = any> extends Promise<T> { }
@@ -20,7 +26,15 @@ abstract class HttpClient {
             this._handleResponse,
             this._handleError,
         );
+        this.instance.defaults.headers = {
+            Authorization: this._getSession()
+        } as CommonHeaderProperties;
     };
+
+    private _getSession = () => {
+        const cookies = new Cookies();
+        return cookies.get("EID_SES");
+    }
 
     private _handleResponse = ({ data }: AxiosResponse) => data;
 
