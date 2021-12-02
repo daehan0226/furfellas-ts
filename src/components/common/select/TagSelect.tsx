@@ -7,15 +7,14 @@ const { Option } = Select;
 interface TagSelectProps {
     placeholder: string,
     options: any[],
-    selectKey: string,
-    onChange: (key: string, value: number[]) => void,
+    onChange: (value: number[]) => void,
 }
 
 
-const TagSelect: FC<TagSelectProps> = ({ placeholder, onChange, options, selectKey }) => {
+const TagSelect: FC<TagSelectProps> = ({ placeholder, onChange, options }) => {
 
     const handleChange = (value: any) => {
-        onChange(selectKey, value)
+        onChange(value)
     }
 
 

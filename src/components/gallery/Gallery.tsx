@@ -8,6 +8,12 @@ import { MainApi } from '../../ApiService';
 const Container = styled.div`
 `;
 
+const FilterContainer = styled.div`
+`;
+
+const DateSelectContainer = styled.div`
+`;
+
 const Header: React.FC = () => {
     const [selectedItems, setSelectedItems] = useState({
         actions: "",
@@ -56,15 +62,15 @@ const Header: React.FC = () => {
 
     return (
         <Container>
-            <>
-                <TagSelect placeholder="Choose actions" onChange={handleSelectedItemChange} selectKey={"actions"} options={actions ? actions.data : []} />
-                <TagSelect placeholder="Choose locations" onChange={handleSelectedItemChange} selectKey={"locations"} options={locations ? locations.data : []} />
-                <TagSelect placeholder="Choose pets" onChange={handleSelectedItemChange} selectKey={"pets"} options={pets ? pets.data : []} />
-            </>
-            <>
+            <FilterContainer>
+                <TagSelect placeholder="Choose actions" onChange={(data) => handleSelectedItemChange("actions", data)} options={actions ? actions.data : []} />
+                <TagSelect placeholder="Choose locations" onChange={(data) => handleSelectedItemChange("locations", data)} options={locations ? locations.data : []} />
+                <TagSelect placeholder="Choose pets" onChange={(data) => handleSelectedItemChange("pets", data)} options={pets ? pets.data : []} />
+            </FilterContainer>
+            <DateSelectContainer>
                 <DateSelect title="Start Date" date={dateInfo.begin} setDate={(date) => handleSelectedDateChange("begin", date)} />
                 <DateSelect title="End Date" date={dateInfo.end} setDate={(date) => handleSelectedDateChange("end", date)} />
-            </>
+            </DateSelectContainer>
         </Container>
     );
 };
