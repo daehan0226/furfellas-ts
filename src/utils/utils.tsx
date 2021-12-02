@@ -1,5 +1,5 @@
-export const sortObjectsByStringKey = (objs: object[], objKey: string, order: string = "ascend"): object[] => {
-    let sorted;
+export const sortObjectsByStringKey = <T,>(objs: T[], objKey: string, order: string = "ascend"): T[] => {
+    let sorted: T[];
     if (order === "descend") {
         sorted = objs.sort((a: any, b: any) => (a[objKey] < b[objKey] ? 1 : -1));
     } else {

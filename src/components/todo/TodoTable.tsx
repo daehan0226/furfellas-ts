@@ -53,7 +53,7 @@ const TodoTable: React.FC = () => {
     }
 
     const handleChange = (pagination: any, filters: any, sorter: any) => {
-        sortObjectsByStringKey(todos, "datetime", sorter.order)
+        setTodos([...sortObjectsByStringKey<Todo>(todos, "datetime", sorter.order)])
     }
 
     return (
