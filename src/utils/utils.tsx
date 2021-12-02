@@ -1,4 +1,4 @@
-export const sortObjectsByStringKey = (objs: object[], objKey: string, order: string): object[] => {
+export const sortObjectsByStringKey = (objs: object[], objKey: string, order: string = "ascend"): object[] => {
     let sorted;
     if (order === "descend") {
         sorted = objs.sort((a: any, b: any) => (a[objKey] < b[objKey] ? 1 : -1));
@@ -26,6 +26,6 @@ export const addMonthToCurrentDate = (months: number): Date => {
     return today;
 }
 
-export const strfDatetime = (datetime: Date) => {
+export const strfDatetime = (datetime: Date): string => {
     return datetime.getFullYear() + '-' + (datetime.getMonth() + 1) + '-' + datetime.getDate();
 }
