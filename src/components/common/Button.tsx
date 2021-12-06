@@ -1,13 +1,10 @@
 import { Button as AntdButton } from 'antd';
-import { ButtonType } from 'antd/lib/button'
+import { ButtonProps as AntdButtonProps } from 'antd/lib/button'
 
-interface ButtonProps {
-    text: string | number;
+
+interface ButtonProps extends AntdButtonProps {
+    text: string;
     onClick: () => void;
-    type?: ButtonType;
-    name?: any;
-    disabled?: boolean;
-    danger?: boolean
 }
 
 const Button: React.FC<ButtonProps> = ({ text, onClick = () => { }, name = "", type = "primary", disabled = false, danger = false }) => {
