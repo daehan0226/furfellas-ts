@@ -47,15 +47,6 @@ function reducer(state: State, action: Action): State {
   }
 }
 
-export const getLocations = (dispatch: Dispatch<Action>) => {
-  // fetch_todos().then((data) =>
-  //   dispatch({
-  //     type: "POPULATE",
-  //     payload: data
-  //   })
-  // );
-};
-
 export function LocationContextProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(reducer, { items: [] });
 
