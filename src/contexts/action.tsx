@@ -48,7 +48,7 @@ export function ActionContextProvider({ children }: { children: React.ReactNode 
   const [state, dispatch] = useReducer(reducer, { items: [] });
 
   const refresh = async () => {
-    const api = new MainApi()
+    const api = MainApi.getInstance()
     const actionData = await api.getActions()
     dispatch({ type: 'SET', payload: { items: actionData.data.result } })
   };

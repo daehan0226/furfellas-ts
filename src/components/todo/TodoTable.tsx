@@ -47,7 +47,7 @@ const TodoTable: React.FC = () => {
     }, [datetimeBegin, datetimeEnd])
 
     const fetchTodos = async (datetimeBegin = '', datetimeEnd = '') => {
-        const api = new MainApi()
+        const api = MainApi.getInstance()
         const todoData = await api.getTodos(`datetime_from=${datetimeBegin}&datetime_to=${datetimeEnd}`)
         setTodos([...todoData.data.result])
     }

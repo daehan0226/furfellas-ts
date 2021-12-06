@@ -60,7 +60,7 @@ export function LocationContextProvider({ children }: { children: React.ReactNod
   const [state, dispatch] = useReducer(reducer, { items: [] });
 
   const refresh = async () => {
-    const api = new MainApi()
+    const api = MainApi.getInstance()
     const locationData = await api.getLocations()
     dispatch({ type: 'SET', payload: { items: locationData.data.result } })
   };

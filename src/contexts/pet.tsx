@@ -13,7 +13,7 @@ export const PetContextProvider: React.FC = (props) => {
   const [data, setData] = useState<Pet[]>([]);
 
   const refresh = async () => {
-    const api = new MainApi()
+    const api = MainApi.getInstance()
     const petData = await api.getPets()
     setData([...petData.data.result])
   };

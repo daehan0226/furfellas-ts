@@ -22,7 +22,7 @@ const ActionForm: React.FC<ActionFormProps> = ({ data, onFinish }) => {
     const actionDispatch = useActionDispatch();
 
     const handleAddAction = async (name: string) => {
-        const api = new MainApi()
+        const api = MainApi.getInstance()
         try {
             const response = await api.addAction(createQueryParams({ name }))
             if (response.status === 201) {
@@ -38,7 +38,7 @@ const ActionForm: React.FC<ActionFormProps> = ({ data, onFinish }) => {
     }
 
     const handleUpdateAction = async (id: number, name: string) => {
-        const api = new MainApi()
+        const api = MainApi.getInstance()
         try {
             const response = await api.updateAction(id, createQueryParams({ name }))
             if (response.status === 204) {
@@ -72,7 +72,7 @@ const ActionForm: React.FC<ActionFormProps> = ({ data, onFinish }) => {
     const handleDelete = () => {
         const confirmAction = async () => {
             if (data && window.confirm(`Do you really want to delete '${data.name}'?`)) {
-                const api = new MainApi()
+                const api = MainApi.getInstance()
                 const result = await api.deleteAction(data.id)
                 console.log(result);
                 onFinish()

@@ -34,7 +34,7 @@ const Header: React.FC = () => {
     const pets = usePet();
 
     const getPhotos = async (params: string) => {
-        const api = new MainApi()
+        const api = MainApi.getInstance()
         const photoData = await api.getPhotos(params)
         console.log(photoData);
     }

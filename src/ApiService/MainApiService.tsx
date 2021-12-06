@@ -60,8 +60,18 @@ export interface GetPhotoResponse extends IResponse {
 }
 
 class MainApi extends HttpClient {
+    private static classInstance?: MainApi;
+
     public constructor() {
         super('http://13.125.226.150:16999/api/');
+    }
+
+    public static getInstance() {
+        if (!this.classInstance) {
+            this.classInstance = new MainApi();
+        }
+
+        return this.classInstance;
     }
 
     public getPets = () => this.instance.get<any, GetPetResponse>('pets/');
