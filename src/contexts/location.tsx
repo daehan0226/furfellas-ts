@@ -62,7 +62,7 @@ export function LocationContextProvider({ children }: { children: React.ReactNod
   const refresh = async () => {
     const api = new MainApi()
     const locationData = await api.getLocations()
-    dispatch({ type: 'SET', payload: { items: locationData.result } })
+    dispatch({ type: 'SET', payload: { items: locationData.data.result } })
   };
 
   useEffect(() => {

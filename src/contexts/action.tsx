@@ -50,7 +50,7 @@ export function ActionContextProvider({ children }: { children: React.ReactNode 
   const refresh = async () => {
     const api = new MainApi()
     const actionData = await api.getActions()
-    dispatch({ type: 'SET', payload: { items: actionData.result } })
+    dispatch({ type: 'SET', payload: { items: actionData.data.result } })
   };
 
   useEffect(() => {

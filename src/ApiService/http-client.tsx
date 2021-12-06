@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosResponse, HeadersDefaults } from 'axios';
+import axios, { AxiosInstance, AxiosResponse, HeadersDefaults, AxiosError } from 'axios';
 import Cookies from "universal-cookie";
 
 interface CommonHeaderProperties extends HeadersDefaults {
@@ -8,6 +8,7 @@ interface CommonHeaderProperties extends HeadersDefaults {
 
 declare module 'axios' {
     interface AxiosResponse<T = any> extends Promise<T> { }
+    interface AxiosError<T = any> extends Promise<T> { }
 }
 
 abstract class HttpClient {
@@ -36,9 +37,9 @@ abstract class HttpClient {
         return cookies.get("EID_SES");
     }
 
-    private _handleResponse = ({ data }: AxiosResponse) => data;
+    private _handleResponse = ({ data, status }: AxiosResponse) => { return { data, status } };
 
-    protected _handleError = (error: any) => Promise.reject(error);
+    protected _handleError = (err: AxiosError) => Promise.reject(err);
 }
 
 export default HttpClient

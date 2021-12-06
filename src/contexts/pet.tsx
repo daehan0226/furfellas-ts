@@ -15,7 +15,7 @@ export const PetContextProvider: React.FC = (props) => {
   const refresh = async () => {
     const api = new MainApi()
     const petData = await api.getPets()
-    setData([...petData.result])
+    setData([...petData.data.result])
   };
 
   useEffect(() => {

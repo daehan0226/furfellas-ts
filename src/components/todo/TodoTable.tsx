@@ -49,7 +49,7 @@ const TodoTable: React.FC = () => {
     const fetchTodos = async (datetimeBegin = '', datetimeEnd = '') => {
         const api = new MainApi()
         const todoData = await api.getTodos(`datetime_from=${datetimeBegin}&datetime_to=${datetimeEnd}`)
-        setTodos([...todoData.result])
+        setTodos([...todoData.data.result])
     }
 
     const handleChange = (pagination: any, filters: any, sorter: any) => {

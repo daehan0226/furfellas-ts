@@ -1,44 +1,62 @@
 import HttpClient from './http-client';
-import { Pet, Todo, Action, Location, User } from '../models';
+import { Pet, Todo, Action, Location, Photo } from '../models';
 
+export interface IResponse {
+    status: 200 | 201 | 204 | 400 | 401 | 404 | 403 | 500,
+}
 
-type GetActionResponse = {
-    result: Action[];
-    message: "Success" | "Fail";
+export interface GetActionResponse extends IResponse {
+    data: {
+        result: Action[];
+        message: string;
+    }
+}
+
+export interface AddActionResponse extends IResponse {
+    data: {
+        result: number;
+        message: string;
+    }
 };
 
-type AddActionResponse = {
-    result: number;
-    message: "CREATED" | "No permission" | "Fail"
+export interface UpdateActionResponse extends IResponse {
+    data: {
+        message: string;
+    }
 };
 
-type GetLocationResponse = {
-    result: Location[];
-    message: "Success" | "Fail";
+export interface DeleteActionResponse extends IResponse {
+    data: {
+        message: string;
+    }
+}
+
+export interface GetLocationResponse extends IResponse {
+    data: {
+        result: Location[];
+        message: string;
+    }
 };
 
-type GetPetResponse = {
-    result: Pet[];
-    message: "Success" | "Fail";
+export interface GetPetResponse extends IResponse {
+    data: {
+        result: Pet[];
+        message: string;
+    }
 };
 
-type GetTodoResponse = {
-    result: Todo[];
-    message: "Success" | "Fail";
+export interface GetTodoResponse extends IResponse {
+    data: {
+        result: Todo[];
+        message: string;
+    }
 };
 
-interface GetPhotoResponse {
-    id: number;
-    action: Action[];
-    create_datetime: string;
-    description: string;
-    image_id: string;
-    location: Location;
-    original: string;
-    pets: Pet[];
-    thumbnail: string;
-    upload_datetime: string;
-    user: User
+export interface GetPhotoResponse extends IResponse {
+    data: {
+        result: Photo[]
+        message: string;
+    }
 }
 
 class MainApi extends HttpClient {
@@ -47,11 +65,13 @@ class MainApi extends HttpClient {
     }
 
     public getPets = () => this.instance.get<any, GetPetResponse>('pets/');
-    public getActions = () => this.instance.get<any, GetActionResponse>('actions/');
     public getLocations = () => this.instance.get<any, GetLocationResponse>('locations/');
     public getPhotos = (queryParams: string) => this.instance.get<any, GetPhotoResponse>(`photos/?${queryParams}`);
 
+    public getActions = () => this.instance.get<any, GetActionResponse>('actions/');
     public addAction = (queryParams: string) => this.instance.post<any, AddActionResponse>(`actions/?${queryParams}`);
+    public updateAction = (id: number, queryParams: string) => this.instance.put<any, UpdateActionResponse>(`actions/${id}?${queryParams}`);
+    public deleteAction = (id: number) => this.instance.delete<any, DeleteActionResponse>(`actions/${id}`);
 
     public getPet = (id: string) => this.instance.get<Pet>(`pets/${id}`);
 
