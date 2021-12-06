@@ -19,14 +19,18 @@ const ActionFormList: React.FC = () => {
 
     const actionState = useActionState();
 
+    const finishForm = () => {
+        setEditKey(null)
+    }
+
     return (
         <Container>
             <button onClick={() => { setEditKey(0) }} >New Action</button>
-            {editKey === 0 && <ActionForm data={initialActionValue} />}
+            {editKey === 0 && <ActionForm data={initialActionValue} onFinish={finishForm} />}
             {actionState.items && actionState.items.map((action) => (
                 <div>
                     {editKey === action.id ? (
-                        <ActionForm data={action} />
+                        <ActionForm data={action} onFinish={finishForm} />
                     ) : (
                         <>
                             <p key={action.id}>{action.name}</p>

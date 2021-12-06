@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+import request from "axios";
 import { MainApi } from "../../ApiService";
 import { useActionDispatch } from "../../contexts";
 import { Action as IAction } from "../../models";
@@ -10,46 +11,83 @@ const Container = styled.div`
 
 
 interface ActionFormProps {
-    data?: IAction
+    data: IAction,
+    onFinish: () => void
 }
 
-const ActionForm: React.FC<ActionFormProps> = ({ data }) => {
+const ActionForm: React.FC<ActionFormProps> = ({ data, onFinish }) => {
     const [value, setValue] = useState<string>(data?.name || "");
+    const [errMsg, setErrMsg] = useState<string>("");
 
     const actionDispatch = useActionDispatch();
 
     const handleAddAction = async (name: string) => {
         const api = new MainApi()
-        const response = await api.addAction(createQueryParams({ name }))
-        actionDispatch({ type: 'ADD', payload: { id: response.result, name: value } })
+        try {
+            const response = await api.addAction(createQueryParams({ name }))
+            if (response.status === 201) {
+                actionDispatch({ type: 'ADD', payload: { id: response.data.result, name: value } })
+                return true
+            }
+        } catch (e) {
+            if (request.isAxiosError(e) && e.response) {
+                setErrMsg(e.response.data.message)
+                return false
+            }
+        }
     }
 
     const handleUpdateAction = async (id: number, name: string) => {
         const api = new MainApi()
-        const result = await api.addAction(createQueryParams({ name }))
-        console.log(result)
-        // actionDispatch({ type: 'UPDATE', payload: { id: data.id, name: value } })
+        try {
+            const response = await api.updateAction(id, createQueryParams({ name }))
+            if (response.status === 204) {
+                actionDispatch({ type: 'UPDATE', payload: { id, name: value } })
+                return true
+            }
+        } catch (e) {
+            if (request.isAxiosError(e) && e.response) {
+                setErrMsg(e.response.data.message)
+                return false
+            }
+        }
     }
 
-
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
+        let result;
         if (data && data.id) {
-            handleUpdateAction(data.id, value)
+            result = await handleUpdateAction(data.id, value)
         } else {
-            handleAddAction(value);
+            result = await handleAddAction(value);
+        }
+        if (result) {
+            onFinish()
         }
     }
 
     const handleCancel = () => {
-        console.log("handleCancel", data?.id, value)
+        onFinish()
+    }
 
+    const handleDelete = () => {
+        const confirmAction = async () => {
+            if (data && window.confirm(`Do you really want to delete '${data.name}'?`)) {
+                const api = new MainApi()
+                const result = await api.deleteAction(data.id)
+                console.log(result);
+                onFinish()
+            }
+        };
+        confirmAction();
     }
 
     return (
         <Container>
             <input value={value} onChange={e => setValue(e.target.value)} />
-            <button onClick={handleSubmit} >{data ? "Update" : "Add"}</button>
-            {data && <button onClick={handleCancel} >Delete</button>}
+            <button onClick={handleSubmit} >{data.id === 0 ? "Add" : "Update"}</button>
+            <button onClick={handleCancel} >Cancel</button>
+            {data && <button onClick={handleDelete} >Delete</button>}
+            {errMsg && <p>{errMsg}</p>}
         </Container>
     );
 };
