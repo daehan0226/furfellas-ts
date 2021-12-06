@@ -1,11 +1,27 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { ActionForm } from ".";
+import { Button } from "../common"
 import { useActionState } from "../../contexts";
 
 
-const Container = styled.div`
+const Container = styled.section`
+    width: 320px;
+    margin: 10px auto;
 `;
+
+const ListBox = styled.ul`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
+
+const List = styled.li`
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+`;
+
 
 type IEditKey = null | number;
 
@@ -25,20 +41,24 @@ const ActionFormList: React.FC = () => {
 
     return (
         <Container>
-            <button onClick={() => { setEditKey(0) }} >New Action</button>
+            <Button text={"New Action"} onClick={() => { setEditKey(0) }} />
             {editKey === 0 && <ActionForm data={initialActionValue} onFinish={finishForm} />}
-            {actionState.items && actionState.items.map((action) => (
-                <div>
-                    {editKey === action.id ? (
-                        <ActionForm data={action} onFinish={finishForm} />
-                    ) : (
-                        <>
-                            <p key={action.id}>{action.name}</p>
-                            <button onClick={() => { setEditKey(action.id) }}>Edit</button>
-                        </>
-                    )}
-                </div>
-            ))}
+            <ListBox>
+                {actionState.items && actionState.items.map((action) => (
+                    <>
+                        {editKey === action.id ? (
+                            <List>
+                                <ActionForm data={action} onFinish={finishForm} />
+                            </List>
+                        ) : (
+                            <List>
+                                <p key={action.id}>{action.name}</p>
+                                <Button text={"Edit"} onClick={() => { setEditKey(action.id) }} />
+                            </List>
+                        )}
+                    </>
+                ))}
+            </ListBox>
         </Container>
     );
 };

@@ -1,14 +1,30 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import request from "axios";
 import { MainApi } from "../../ApiService";
 import { useActionDispatch } from "../../contexts";
 import { Action as IAction } from "../../models";
 import { createQueryParams } from "../../utils/utils";
+import { Button } from "../common"
 
 const Container = styled.div`
+    margin: 10px auto;
+    width: 320px;
 `;
 
+
+const Input = styled.input`
+  width: 200px;
+`;
+const Text = styled.p`
+  width: 200px;
+`;
+
+const Buttons = styled.div`
+    display: flex;
+    margin-top: 10px;
+    justify-content: space-around;
+`
 
 interface ActionFormProps {
     data: IAction,
@@ -53,6 +69,23 @@ const ActionForm: React.FC<ActionFormProps> = ({ data, onFinish }) => {
         }
     }
 
+    const handleDeleteAction = async (id: number) => {
+        try {
+            const api = MainApi.getInstance()
+            const response = await api.deleteAction(data.id)
+            if (response.status === 204) {
+                actionDispatch({ type: 'DELETE', payload: { id } })
+                return true
+            }
+
+        } catch (e) {
+            if (request.isAxiosError(e) && e.response) {
+                setErrMsg(e.response.data.message)
+                return false
+            }
+        }
+    }
+
     const handleSubmit = async () => {
         let result;
         if (data && data.id) {
@@ -72,9 +105,7 @@ const ActionForm: React.FC<ActionFormProps> = ({ data, onFinish }) => {
     const handleDelete = () => {
         const confirmAction = async () => {
             if (data && window.confirm(`Do you really want to delete '${data.name}'?`)) {
-                const api = MainApi.getInstance()
-                const result = await api.deleteAction(data.id)
-                console.log(result);
+                await handleDeleteAction(data.id)
                 onFinish()
             }
         };
@@ -83,10 +114,12 @@ const ActionForm: React.FC<ActionFormProps> = ({ data, onFinish }) => {
 
     return (
         <Container>
-            <input value={value} onChange={e => setValue(e.target.value)} />
-            <button onClick={handleSubmit} >{data.id === 0 ? "Add" : "Update"}</button>
-            <button onClick={handleCancel} >Cancel</button>
-            {data && <button onClick={handleDelete} >Delete</button>}
+            <Input value={value} onChange={e => setValue(e.target.value)} />
+            <Buttons>
+                <Button text={data.id === 0 ? "Add" : "Update"} onClick={handleSubmit} />
+                <Button text={"Cancel"} type={"default"} onClick={handleCancel} />
+                {data && <Button text={"Delete"} onClick={handleDelete} danger={true} />}
+            </Buttons>
             {errMsg && <p>{errMsg}</p>}
         </Container>
     );
