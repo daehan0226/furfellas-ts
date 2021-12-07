@@ -1,6 +1,4 @@
-import { Button as AntdButton } from 'antd';
-import { ButtonProps as AntdButtonProps } from 'antd/lib/button'
-
+import { Button as AntdButton, ButtonProps as AntdButtonProps } from 'antd';
 
 interface ButtonProps extends AntdButtonProps {
     text: string;
