@@ -20,6 +20,10 @@ const Text = styled.p`
   width: 200px;
 `;
 
+const ErrorMsg = styled.span`
+    color: ${({ theme }) => theme.colors.common.error};
+`
+
 const Buttons = styled.div`
     display: flex;
     margin-top: 10px;
@@ -120,7 +124,7 @@ const ActionForm: React.FC<ActionFormProps> = ({ data, onFinish }) => {
                 <Button text={"Cancel"} type={"default"} onClick={handleCancel} />
                 {data && <Button text={"Delete"} onClick={handleDelete} danger={true} />}
             </Buttons>
-            {errMsg && <p>{errMsg}</p>}
+            {errMsg && <ErrorMsg>{errMsg}</ErrorMsg>}
         </Container>
     );
 };

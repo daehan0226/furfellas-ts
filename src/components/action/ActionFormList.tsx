@@ -22,6 +22,11 @@ const List = styled.li`
     justify-content: space-between;
 `;
 
+const Header = styled.div`
+    display: flex;
+    justify-content: end;
+    margin-bottom: 10px;
+`;
 
 type IEditKey = null | number;
 
@@ -41,7 +46,9 @@ const ActionFormList: React.FC = () => {
 
     return (
         <Container>
-            <Button text={"New Action"} onClick={() => { setEditKey(0) }} />
+            <Header>
+                <Button text={"New Action"} onClick={() => { setEditKey(0) }} />
+            </Header>
             {editKey === 0 && <ActionForm data={initialActionValue} onFinish={finishForm} />}
             <ListBox>
                 {actionState.items && actionState.items.map((action) => (

@@ -4,6 +4,8 @@ import { ActionFormList } from "./";
 
 const Container = styled.div`
 `;
+const Title = styled.h2`
+`;
 
 
 const Action: React.FC = () => {
@@ -12,7 +14,7 @@ const Action: React.FC = () => {
 
     return (
         <Container>
-            <h2>Action</h2>
+            <Title>Action</Title>
             <ActionFormList />
         </Container>
     );
