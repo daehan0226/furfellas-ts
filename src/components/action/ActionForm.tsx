@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import request from "axios";
+import { Popconfirm } from 'antd';
 import { MainApi } from "../../ApiService";
 import { useActionDispatch } from "../../contexts";
 import { Action as IAction } from "../../models";
@@ -106,15 +107,13 @@ const ActionForm: React.FC<ActionFormProps> = ({ data, onFinish }) => {
         onFinish()
     }
 
-    const handleDelete = () => {
-        const confirmAction = async () => {
-            if (data && window.confirm(`Do you really want to delete '${data.name}'?`)) {
-                await handleDeleteAction(data.id)
-                onFinish()
-            }
-        };
-        confirmAction();
+    const handleDelete = async () => {
+        const result = await handleDeleteAction(data.id)
+        if (result) {
+            onFinish()
+        }
     }
+
 
     return (
         <Container>
@@ -122,7 +121,11 @@ const ActionForm: React.FC<ActionFormProps> = ({ data, onFinish }) => {
             <Buttons>
                 <Button text={data.id === 0 ? "Add" : "Update"} onClick={handleSubmit} />
                 <Button text={"Cancel"} type={"default"} onClick={handleCancel} />
-                {data && <Button text={"Delete"} onClick={handleDelete} danger={true} />}
+                {data && (
+                    <Popconfirm title={`Are you sure to delete ${data.name}？`} okText="Yes" onConfirm={handleDelete} cancelText="No">
+                        <Button text={"Delete"} onClick={() => { }} danger={true} />
+                    </Popconfirm>
+                )}
             </Buttons>
             {errMsg && <ErrorMsg>{errMsg}</ErrorMsg>}
         </Container>
