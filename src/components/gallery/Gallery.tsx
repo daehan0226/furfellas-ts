@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
-import { useActionState, useLocationState, usePet } from '../../contexts';
+import { useActionState, useLocationState, usePetState } from '../../contexts';
 import { createQueryParams, getCurrentStringDate, strfDatetime, addMonthToCurrentDate } from '../../utils/utils';
 import { TagSelect, DateSelect } from '../common/select';
 import { MainApi } from '../../ApiService';
@@ -31,7 +31,7 @@ const Header: React.FC = () => {
 
     const actionState = useActionState();
     const locationState = useLocationState();
-    const pets = usePet();
+    const petState = usePetState();
 
     const getPhotos = async (params: string) => {
         const api = MainApi.getInstance()
@@ -74,7 +74,7 @@ const Header: React.FC = () => {
             <FilterContainer>
                 <TagSelect placeholder="Choose actions" onChange={(data) => handleSelectedItemChange("actions", data)} options={actionState.items.length > 0 ? actionState.items : []} />
                 <TagSelect placeholder="Choose locations" onChange={(data) => handleSelectedItemChange("locations", data)} options={locationState.items.length > 0 ? locationState.items : []} />
-                <TagSelect placeholder="Choose pets" onChange={(data) => handleSelectedItemChange("pets", data)} options={pets ? pets.data : []} />
+                <TagSelect placeholder="Choose pets" onChange={(data) => handleSelectedItemChange("pets", data)} options={petState.items.length > 0 ? petState.items : []} />
             </FilterContainer>
             <DateSelectContainer>
                 <DateSelect title="Start Date" date={dateInfo.begin} setDate={(date) => handleSelectedDateChange("begin", date)} />

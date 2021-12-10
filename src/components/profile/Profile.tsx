@@ -1,13 +1,14 @@
 import React from 'react';
 import { Card } from "./card";
-import { usePet } from '../../contexts';
+import { usePetState } from '../../contexts';
 
 
 const Profile: React.FC = () => {
-    const pets = usePet();
+
+    const petState = usePetState();
     return (
         <>
-            {pets && pets.data.map(pet => (
+            {petState.items && petState.items.map(pet => (
                 <Card key={pet.id} data={pet} />
             ))}
         </>
