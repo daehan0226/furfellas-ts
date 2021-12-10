@@ -56,7 +56,7 @@ const LocationFormList: React.FC = () => {
             </Header>
             <Divider />
             <ListBox>
-                {locationState.items && locationState.items.map((location) => (
+                {locationState.items.map((location) => (
                     <>
                         {editKey === location.id ? (
                             <List>

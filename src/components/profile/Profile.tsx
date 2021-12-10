@@ -8,7 +8,7 @@ const Profile: React.FC = () => {
     const petState = usePetState();
     return (
         <>
-            {petState.items && petState.items.map(pet => (
+            {petState.items.map(pet => (
                 <Card key={pet.id} data={pet} />
             ))}
         </>

@@ -56,7 +56,7 @@ const ActionFormList: React.FC = () => {
             </Header>
             <Divider />
             <ListBox>
-                {actionState.items && actionState.items.map((action) => (
+                {actionState.items.map((action) => (
                     <>
                         {editKey === action.id ? (
                             <List>

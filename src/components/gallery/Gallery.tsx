@@ -72,9 +72,9 @@ const Header: React.FC = () => {
     return (
         <Container>
             <FilterContainer>
-                <TagSelect placeholder="Choose actions" onChange={(data) => handleSelectedItemChange("actions", data)} options={actionState.items.length > 0 ? actionState.items : []} />
-                <TagSelect placeholder="Choose locations" onChange={(data) => handleSelectedItemChange("locations", data)} options={locationState.items.length > 0 ? locationState.items : []} />
-                <TagSelect placeholder="Choose pets" onChange={(data) => handleSelectedItemChange("pets", data)} options={petState.items.length > 0 ? petState.items : []} />
+                <TagSelect placeholder="Choose actions" onChange={(data) => handleSelectedItemChange("actions", data)} options={actionState.items} />
+                <TagSelect placeholder="Choose locations" onChange={(data) => handleSelectedItemChange("locations", data)} options={locationState.items} />
+                <TagSelect placeholder="Choose pets" onChange={(data) => handleSelectedItemChange("pets", data)} options={petState.items} />
             </FilterContainer>
             <DateSelectContainer>
                 <DateSelect title="Start Date" date={dateInfo.begin} setDate={(date) => handleSelectedDateChange("begin", date)} />
