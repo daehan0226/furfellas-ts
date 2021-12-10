@@ -38,6 +38,26 @@ export interface GetLocationResponse extends IResponse {
     }
 };
 
+export interface AddLocationResponse extends IResponse {
+    data: {
+        result: number;
+        message: string;
+    }
+};
+
+export interface UpdateLocationResponse extends IResponse {
+    data: {
+        message: string;
+    }
+};
+
+export interface DeleteLocationResponse extends IResponse {
+    data: {
+        message: string;
+    }
+}
+
+
 export interface GetPetResponse extends IResponse {
     data: {
         result: Pet[];
@@ -75,8 +95,13 @@ class MainApi extends HttpClient {
     }
 
     public getPets = () => this.instance.get<any, GetPetResponse>('pets/');
-    public getLocations = () => this.instance.get<any, GetLocationResponse>('locations/');
     public getPhotos = (queryParams: string) => this.instance.get<any, GetPhotoResponse>(`photos/?${queryParams}`);
+
+
+    public getLocations = () => this.instance.get<any, GetLocationResponse>('locations/');
+    public addLocation = (queryParams: string) => this.instance.post<any, AddLocationResponse>(`locations/?${queryParams}`);
+    public updateLocation = (id: number, queryParams: string) => this.instance.put<any, UpdateLocationResponse>(`locations/${id}?${queryParams}`);
+    public deleteLocation = (id: number) => this.instance.delete<any, DeleteLocationResponse>(`locations/${id}`);
 
     public getActions = () => this.instance.get<any, GetActionResponse>('actions/');
     public addAction = (queryParams: string) => this.instance.post<any, AddActionResponse>(`actions/?${queryParams}`);

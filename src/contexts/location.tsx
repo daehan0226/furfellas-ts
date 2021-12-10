@@ -1,34 +1,30 @@
-
-import React, { useReducer, useContext, createContext, Dispatch, useEffect } from 'react';
+import React, { createContext, useEffect, useContext, Dispatch, useReducer, } from "react";
 import { MainApi } from "../ApiService";
-import { Location } from "../models"
+import { Location as ILocation } from "../models"
 
 
 type State = {
-  items: Location[]
+  items: ILocation[]
 }
 
-type Action =
-  | { type: 'SET'; payload: { items: Location[] } }
+type Location =
+  | { type: 'SET'; payload: { items: ILocation[] } }
   | { type: 'ADD'; payload: { id: number, name: string } }
   | { type: 'UPDATE'; payload: { id: number, name: string } }
   | { type: 'DELETE'; payload: { id: number } };
 
-type LocationDispatch = Dispatch<Action>;
+type LocationDispatch = Dispatch<Location>;
 
 const LocationStateContext = createContext<State>({ items: [] });
 const LocationDispatchContext = createContext<LocationDispatch>(() => null);
 
-// 리듀서 액션 함수들 따로 만들기?
-// api call status에 따라 타입 결정
-// 더 좋은 방법 있는지 찾아보기
-function reducer(state: State, action: Action): State {
+function reducer(state: State, action: Location): State {
   switch (action.type) {
     case 'SET':
       return { items: [...state.items, ...action.payload.items] }
     case 'ADD':
       return {
-        items: [...state.items, action.payload]
+        items: [action.payload, ...state.items,]
       };
     case 'UPDATE':
       return {
@@ -46,6 +42,7 @@ function reducer(state: State, action: Action): State {
       throw new Error('Unhandled action');
   }
 }
+
 
 export function LocationContextProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(reducer, { items: [] });
@@ -69,7 +66,6 @@ export function LocationContextProvider({ children }: { children: React.ReactNod
   );
 }
 
-// state 와 dispatch 를 쉽게 사용하기 위한 커스텀 Hooks
 export function useLocationState(): State {
   const state = useContext(LocationStateContext);
   if (!state) throw new Error('Cannot find locationProvider');
@@ -78,7 +74,6 @@ export function useLocationState(): State {
 
 export function useLocationDispatch(): LocationDispatch {
   const dispatch = useContext(LocationDispatchContext);
-  if (!dispatch) throw new Error('Cannot find locationProvider');
+  if (!dispatch) throw new Error('Cannot find actionProvider');
   return dispatch;
 }
-// https://react.vlpt.us/using-typescript/04-ts-context.html
