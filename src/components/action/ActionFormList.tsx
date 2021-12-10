@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { ActionForm } from ".";
 import { Button } from "../common"
 import { useActionState } from "../../contexts";
+import { Divider } from 'antd';
 
 
 const Container = styled.section`
@@ -47,9 +48,13 @@ const ActionFormList: React.FC = () => {
     return (
         <Container>
             <Header>
-                <Button text={"New Action"} onClick={() => { setEditKey(0) }} />
+                {editKey === 0 ? (
+                    <ActionForm data={initialActionValue} onFinish={finishForm} />
+                ) : (
+                    <Button text={"New Action"} onClick={() => { setEditKey(0) }} />
+                )}
             </Header>
-            {editKey === 0 && <ActionForm data={initialActionValue} onFinish={finishForm} />}
+            <Divider />
             <ListBox>
                 {actionState.items && actionState.items.map((action) => (
                     <>
@@ -63,6 +68,7 @@ const ActionFormList: React.FC = () => {
                                 <Button text={"Edit"} onClick={() => { setEditKey(action.id) }} />
                             </List>
                         )}
+                        <Divider style={{ margin: '6px 0' }} />
                     </>
                 ))}
             </ListBox>

@@ -10,8 +10,6 @@ const Title = styled.h2`
 
 const Action: React.FC = () => {
 
-
-
     return (
         <Container>
             <Title>Action</Title>

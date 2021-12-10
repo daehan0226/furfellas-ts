@@ -1,24 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import request from "axios";
 import { Popconfirm } from 'antd';
 import { MainApi } from "../../ApiService";
-import { useActionDispatch } from "../../contexts";
+import { useActionDispatch, useActionState } from "../../contexts";
 import { Action as IAction } from "../../models";
 import { createQueryParams } from "../../utils/utils";
-import { Button } from "../common"
+import { Button, Input } from "../common"
 
 const Container = styled.div`
     margin: 10px auto;
     width: 320px;
-`;
-
-
-const Input = styled.input`
-  width: 200px;
-`;
-const Text = styled.p`
-  width: 200px;
 `;
 
 const ErrorMsg = styled.span`
@@ -39,7 +31,9 @@ interface ActionFormProps {
 const ActionForm: React.FC<ActionFormProps> = ({ data, onFinish }) => {
     const [value, setValue] = useState<string>(data?.name || "");
     const [errMsg, setErrMsg] = useState<string>("");
+    const [submitDisabled, setSubmitDisabled] = useState<boolean>(true);
 
+    const actionState = useActionState();
     const actionDispatch = useActionDispatch();
 
     const handleAddAction = async (name: string) => {
@@ -114,20 +108,59 @@ const ActionForm: React.FC<ActionFormProps> = ({ data, onFinish }) => {
         }
     }
 
+    const checkDuplicates = (newName: string) => {
+        if (data.name === newName) {
+            return;
+        }
+
+        if (actionState.items.find(item => item.name === newName)) {
+            setErrMsg(`Duplicate - ${newName}`)
+        } else {
+            setErrMsg("")
+        }
+    }
+
+    useEffect(() => {
+        checkDuplicates(value)
+    }, [value])
+
+
+    useEffect(() => {
+        setSubmitDisabled(true)
+        if (value === "" || errMsg !== "") {
+            return;
+        }
+        if (data.id !== 0 && value === data.name) {
+            return;
+        }
+        setSubmitDisabled(false)
+
+    }, [value, errMsg])
+
+
+    const DeleteButton = () => {
+        return (
+            <Popconfirm title={`Are you sure to delete ${data.name}？`} okText="Yes" onConfirm={handleDelete} cancelText="No">
+                <Button text={"Delete"} danger={true} />
+            </Popconfirm>
+        )
+    }
 
     return (
         <Container>
-            <Input value={value} onChange={e => setValue(e.target.value)} />
-            <Buttons>
-                <Button text={data.id === 0 ? "Add" : "Update"} onClick={handleSubmit} />
-                <Button text={"Cancel"} type={"default"} onClick={handleCancel} />
-                {data && (
-                    <Popconfirm title={`Are you sure to delete ${data.name}？`} okText="Yes" onConfirm={handleDelete} cancelText="No">
-                        <Button text={"Delete"} onClick={() => { }} danger={true} />
-                    </Popconfirm>
-                )}
-            </Buttons>
+            <Input value={value} onChange={e => setValue(e.target.value)} placeholder={data.name || "New location"} />
             {errMsg && <ErrorMsg>{errMsg}</ErrorMsg>}
+            <Buttons>
+                {data.id === 0 ? (
+                    <Button text={"Add"} onClick={handleSubmit} disabled={submitDisabled} />
+                ) : (
+                    <>
+                        <Button text={"Update"} onClick={handleSubmit} disabled={submitDisabled} />
+                        <DeleteButton />
+                    </>
+                )}
+                <Button text={"Cancel"} type={"default"} onClick={handleCancel} />
+            </Buttons>
         </Container>
     );
 };

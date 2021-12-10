@@ -32,9 +32,9 @@ interface LocationFormProps {
 const LocationForm: React.FC<LocationFormProps> = ({ data, onFinish }) => {
     const [value, setValue] = useState<string>(data?.name || "");
     const [errMsg, setErrMsg] = useState<string>("");
+    const [submitDisabled, setSubmitDisabled] = useState<boolean>(true);
 
     const locationState = useLocationState();
-
     const locationDispatch = useLocationDispatch();
 
     const handleAddLocation = async (name: string) => {
@@ -125,6 +125,18 @@ const LocationForm: React.FC<LocationFormProps> = ({ data, onFinish }) => {
         checkDuplicates(value)
     }, [value])
 
+    useEffect(() => {
+        setSubmitDisabled(true)
+        if (value === "" || errMsg !== "") {
+            return;
+        }
+        if (data.id !== 0 && value === data.name) {
+            return;
+        }
+        setSubmitDisabled(false)
+
+    }, [value, errMsg])
+
     const DeleteButton = () => {
         return (
             <Popconfirm title={`Are you sure to delete ${data.name}？`} okText="Yes" onConfirm={handleDelete} cancelText="No">
@@ -139,10 +151,10 @@ const LocationForm: React.FC<LocationFormProps> = ({ data, onFinish }) => {
             {errMsg && <ErrorMsg>{errMsg}</ErrorMsg>}
             <Buttons>
                 {data.id === 0 ? (
-                    <Button text={"Add"} onClick={handleSubmit} disabled={value === "" || errMsg !== ""} />
+                    <Button text={"Add"} onClick={handleSubmit} disabled={submitDisabled} />
                 ) : (
                     <>
-                        <Button text={"Update"} onClick={handleSubmit} disabled={value === "" || errMsg !== ""} />
+                        <Button text={"Update"} onClick={handleSubmit} disabled={submitDisabled} />
                         <DeleteButton />
                     </>
                 )}
