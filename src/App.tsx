@@ -8,6 +8,7 @@ import { Home, Admin } from "./pages"
 import { LocationContextProvider, ActionContextProvider, PetContextProvider } from './contexts';
 import { Action } from './components/action';
 import { Location } from './components/location';
+import { Pet } from './components/pet';
 
 
 const withContext = <T,>(Component: React.ComponentType<T>) => {
@@ -32,6 +33,7 @@ const App: React.FC = () => {
           <Route exact path="/admin" component={Admin} />
           <Route exact path="/admin/action" component={Action} />
           <Route exact path="/admin/location" component={Location} />
+          <Route exact path="/admin/pet" component={Pet} />
 
           <Redirect path="*" to="/" />
         </Switch>
