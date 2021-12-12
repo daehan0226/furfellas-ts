@@ -9,7 +9,7 @@ import { LocationContextProvider, ActionContextProvider, PetContextProvider } fr
 import { Action } from './components/action';
 import { Location } from './components/location';
 import { Pet } from './components/pet';
-
+import { ProtectedRoute } from './hoc';
 
 const withContext = <T,>(Component: React.ComponentType<T>) => {
   return (props: T) => (
@@ -34,7 +34,12 @@ const App: React.FC = () => {
           <Route exact path="/admin/action" component={Action} />
           <Route exact path="/admin/location" component={Location} />
           <Route exact path="/admin/pet" component={Pet} />
-
+          <ProtectedRoute
+            path='/private'
+            isAuthenticated={false}
+            component={Pet}
+            authenticationPath={'/'}
+          />
           <Redirect path="*" to="/" />
         </Switch>
       </div>
@@ -43,3 +48,4 @@ const App: React.FC = () => {
 }
 
 export default withContext(App);
+
