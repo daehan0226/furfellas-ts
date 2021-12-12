@@ -11,15 +11,21 @@ import { Location } from './components/location';
 import { Pet } from './components/pet';
 import { ProtectedRoute } from './hoc';
 
-const withContext = <T,>(Component: React.ComponentType<T>) => {
+import { Provider } from 'react-redux'
+import { store } from './redux'
+import SingIn from './pages/SingIn';
+
+const withProviders = <T,>(Component: React.ComponentType<T>) => {
   return (props: T) => (
-    <LocationContextProvider>
-      <ActionContextProvider>
-        <PetContextProvider>
-          <Component {...props} />
-        </PetContextProvider>
-      </ActionContextProvider>
-    </LocationContextProvider>
+    <Provider store={store}>
+      <LocationContextProvider>
+        <ActionContextProvider>
+          <PetContextProvider>
+            <Component {...props} />
+          </PetContextProvider>
+        </ActionContextProvider>
+      </LocationContextProvider>
+    </Provider>
   );
 }
 
@@ -30,6 +36,7 @@ const App: React.FC = () => {
         <Header></Header>
         <Switch>
           <Route exact path="/" component={Home} />
+          <Route exact path="/signin" component={SingIn} />
           <Route exact path="/admin" component={Admin} />
           <Route exact path="/admin/action" component={Action} />
           <Route exact path="/admin/location" component={Location} />
@@ -47,5 +54,5 @@ const App: React.FC = () => {
   );
 }
 
-export default withContext(App);
+export default withProviders(App);
 

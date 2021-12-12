@@ -5,6 +5,13 @@ export interface IResponse {
     status: 200 | 201 | 204 | 400 | 401 | 404 | 403 | 500,
 }
 
+export interface AddSessionResponse extends IResponse {
+    data: {
+        result?: any;
+        message: string;
+    }
+};
+
 export interface GetActionResponse extends IResponse {
     data: {
         result: Action[];
@@ -97,6 +104,7 @@ class MainApi extends HttpClient {
     public getPets = () => this.instance.get<any, GetPetResponse>('pets/');
     public getPhotos = (queryParams: string) => this.instance.get<any, GetPhotoResponse>(`photos/?${queryParams}`);
 
+    public addSession = (data: { username: string, password: string }) => this.instance.post<any, AddSessionResponse>(`sessions/`, data);
 
     public getLocations = () => this.instance.get<any, GetLocationResponse>('locations/');
     public addLocation = (queryParams: string) => this.instance.post<any, AddLocationResponse>(`locations/?${queryParams}`);
