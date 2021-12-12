@@ -1,5 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 import styled from "styled-components";
+
+import { useActions } from '../../hooks/useActions';
+import { useAppSelector } from '../../hooks/useTypedSelector';
 
 const Spacer = styled.div`
   height: 80px;
@@ -27,16 +32,36 @@ const Title = styled.h1`
 `;
 
 const Header: React.FC = () => {
-    return (
-        <>
-            <Container>
-                <Title>
-                    test
-                </Title>
-            </Container>
-            <Spacer />
-        </>
-    );
+  const auth = useAppSelector((state) => state.auth);
+  const { reauthenticate } = useActions();
+
+  useEffect(() => {
+    reauthenticate()
+  }, [])
+
+  return (
+    <>
+      <Container>
+        <Title>
+          test
+        </Title>
+
+        <div>
+          {auth.loading ? (
+            <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />
+          ) : (
+            auth.loggedIn && auth.data ? (
+              <p>{auth.data.user}</p>
+            ) : (
+              <p>Sign In</p>
+            )
+          )}
+
+        </div>
+      </Container>
+      <Spacer />
+    </>
+  );
 };
 
 export default Header;

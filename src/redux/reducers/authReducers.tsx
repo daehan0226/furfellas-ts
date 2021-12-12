@@ -1,16 +1,25 @@
 import { UserAction } from '../actions';
 import { UserActionType } from '../action-types';
 
+
+interface IAuth {
+    user: string,
+    is_admin: number,
+    session: string
+}
+
 interface UserState {
     loading: boolean,
     error: string | null,
-    data: object,
+    data: IAuth | null,
+    loggedIn: boolean,
 }
 
 const initialState = {
     loading: false,
+    loggedIn: false,
     error: null,
-    data: {},
+    data: null
 }
 
 const reducer = (
@@ -21,12 +30,13 @@ const reducer = (
         case UserActionType.AUTHENTICATE_REQUEST:
             return { ...state, loading: true }
         case UserActionType.AUTHENTICATE:
-            console.log(action.payload)
-            return { loading: false, error: null, data: action.payload };
-        case UserActionType.DEAUTHENTICATE:
-            return { loading: false, error: null, data: {} };
         case UserActionType.REAUTHENTICATE:
-            return { loading: false, error: null, data: {} };
+            console.log(action.payload)
+            return { loading: false, error: null, loggedIn: true, data: action.payload };
+        case UserActionType.DEAUTHENTICATE:
+            return { loading: false, error: null, loggedIn: false, data: null };
+        case UserActionType.AUTHENTICATE_INIT:
+            return { ...initialState };
         default:
             return state;
     }

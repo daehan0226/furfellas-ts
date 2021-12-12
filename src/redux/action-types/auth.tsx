@@ -4,4 +4,5 @@ export enum UserActionType {
     AUTHENTICATE_FAIL = "authenticate_fail",
     DEAUTHENTICATE = "deauthenticate",
     REAUTHENTICATE = "reauthenticate",
+    AUTHENTICATE_INIT = "authenticate_init",
 }

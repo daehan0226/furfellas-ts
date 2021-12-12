@@ -30,10 +30,11 @@ const withProviders = <T,>(Component: React.ComponentType<T>) => {
 }
 
 const App: React.FC = () => {
+
   return (
     <Router>
       <div className="App">
-        <Header></Header>
+        <Header />
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/signin" component={SingIn} />

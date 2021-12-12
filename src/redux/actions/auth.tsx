@@ -27,9 +27,13 @@ interface SessionAuthRequestAction {
 }
 
 
+interface SessionAuthInitAction {
+    type: UserActionType.AUTHENTICATE_INIT
+}
 export type UserAction =
     | SessionAuthAction
     | SessionDeAuthAction
     | SessionReAuthAction
     | SessionAuthFailAction
-    | SessionAuthRequestAction;
+    | SessionAuthRequestAction
+    | SessionAuthInitAction;

@@ -3,6 +3,7 @@ import { UserActionType } from "../action-types";
 import { Dispatch } from "redux";
 import { UserAction } from "../actions";
 import { MainApi } from "../../ApiService";
+import { saveToken } from "../../utils";
 
 export const authenticate =
     (user: { username: string, password: string }) => {
@@ -17,64 +18,41 @@ export const authenticate =
                     type: UserActionType.AUTHENTICATE,
                     payload: response.data.result
                 });
+                saveToken(response.data.result.session)
             }
             catch (err: AxiosError | unknown) {
+                let errMsg: string;
                 if (axios.isAxiosError(err)) {
-                    console.log(err.response?.status)
-                    dispatch({
-                        type: UserActionType.AUTHENTICATE_FAIL,
-                        payload: err.message,
-                    });
-                } else { // 나머지 에러를 처리한다.
-                    console.log("Not AxiosError");
-                    console.dir(err);
+                    errMsg = err.response?.data.message
+                } else {
+                    errMsg = "Oops, something went wrong"
                 }
+                dispatch({
+                    type: UserActionType.AUTHENTICATE_FAIL,
+                    payload: errMsg,
+                });
             }
         }
     }
 
 
-// export const reauthenticate =
-//   (failCallback = () => { }) =>
-//     (dispatch) => {
-//       const cookies = new Cookies();
-//       const session = cookies.get("EID_SES");
-//       if (session) {
-//         fetch(`${server}/api/sessions/validate`, {
-//           headers: {
-//             "Content-Type": "application/json",
-//             Authorization: session,
-//           },
-//         })
-//           .then((res) => {
-//             if (res.status === 200) {
-//               return res.json();
-//             }
-//           })
-//           .then((response) => {
-//             dispatch({ type: ActionType.USER_REAUTHENTICATE, payload: response.result });
-//           })
-//           .catch((err) => {
-//             dispatch({ type: ActionType.USER_DEAUTHENTICATE });
-//             failCallback();
-//           });
-//       } else {
-//         dispatch({ type: ActionType.USER_DEAUTHENTICATE });
-//         failCallback();
-//       }
-//     };
-
-// export const deauthenticate = () => (dispatch) => {
-//   const cookies = new Cookies();
-//   const session = cookies.get("EID_SES");
-//   cookies.remove("EID_SES", { path: "/" });
-//   fetch(`${server}/api/sessions/`, {
-//     headers: {
-//       "Content-Type": "application/json",
-//       Authorization: session,
-//     },
-//     method: "DELETE",
-//   }).then((response) => {
-//     dispatch({ type: ActionType.USER_DEAUTHENTICATE });
-//   });
-// };
+export const reauthenticate = () => {
+    return async (dispatch: Dispatch<UserAction>) => {
+        dispatch({
+            type: UserActionType.AUTHENTICATE_REQUEST
+        });
+        try {
+            const api = MainApi.getInstance()
+            const response = await api.validateSession()
+            dispatch({
+                type: UserActionType.AUTHENTICATE,
+                payload: response.data.result
+            });
+        }
+        catch (err: AxiosError | unknown) {
+            dispatch({
+                type: UserActionType.AUTHENTICATE_INIT
+            });
+        }
+    }
+}
