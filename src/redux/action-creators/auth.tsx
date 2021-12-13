@@ -3,7 +3,7 @@ import { UserActionType } from "../action-types";
 import { Dispatch } from "redux";
 import { UserAction } from "../actions";
 import { MainApi } from "../../ApiService";
-import { saveToken } from "../../utils";
+import { saveToken, deleteToken } from "../../utils";
 
 export const authenticate =
     (user: { username: string, password: string }) => {
@@ -52,6 +52,29 @@ export const reauthenticate = () => {
         catch (err: AxiosError | unknown) {
             dispatch({
                 type: UserActionType.AUTHENTICATE_INIT
+            });
+        }
+    }
+}
+
+export const deauthenticate = () => {
+    return async (dispatch: Dispatch<UserAction>) => {
+        dispatch({
+            type: UserActionType.AUTHENTICATE_REQUEST
+        });
+        try {
+            const api = MainApi.getInstance()
+            await api.deleteSession()
+        }
+        catch (err: AxiosError | unknown) {
+            dispatch({
+                type: UserActionType.AUTHENTICATE_INIT
+            });
+        }
+        finally {
+            deleteToken()
+            dispatch({
+                type: UserActionType.DEAUTHENTICATE
             });
         }
     }

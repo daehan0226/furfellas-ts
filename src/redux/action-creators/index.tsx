@@ -1,7 +1,8 @@
-import { authenticate, reauthenticate } from "./auth";
+import { authenticate, reauthenticate, deauthenticate } from "./auth";
 
 
 export {
     authenticate,
-    reauthenticate
+    reauthenticate,
+    deauthenticate
 }

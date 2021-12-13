@@ -19,6 +19,12 @@ export interface ValidateSessionResponse extends IResponse {
     }
 };
 
+export interface DeleteSessionResponse extends IResponse {
+    data: {
+        message: string;
+    }
+}
+
 export interface GetActionResponse extends IResponse {
     data: {
         result: Action[];
@@ -112,7 +118,8 @@ class MainApi extends HttpClient {
     public getPhotos = (queryParams: string) => this.instance.get<any, GetPhotoResponse>(`photos/?${queryParams}`);
 
     public addSession = (data: { username: string, password: string }) => this.instance.post<any, AddSessionResponse>(`sessions/`, data);
-    public validateSession = () => this.instance.get<any, ValidateSessionResponse>(`sessions/validate`,);
+    public validateSession = () => this.instance.get<any, ValidateSessionResponse>(`sessions/validate`);
+    public deleteSession = () => this.instance.delete<any, ValidateSessionResponse>(`sessions/`);
 
     public getLocations = () => this.instance.get<any, GetLocationResponse>('locations/');
     public addLocation = (queryParams: string) => this.instance.post<any, AddLocationResponse>(`locations/?${queryParams}`);

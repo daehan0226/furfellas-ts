@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 import './App.css';
 import './styles/styles.css';
-import { Header } from "./components/common"
+import { Header, Footer } from "./components/common"
 import { Home, Admin } from "./pages"
 
 import { LocationContextProvider, ActionContextProvider, PetContextProvider } from './contexts';
@@ -14,6 +14,7 @@ import { ProtectedRoute } from './hoc';
 import { Provider } from 'react-redux'
 import { store } from './redux'
 import SingIn from './pages/SingIn';
+import { useActions } from './hooks/useActions';
 
 const withProviders = <T,>(Component: React.ComponentType<T>) => {
   return (props: T) => (
@@ -30,6 +31,11 @@ const withProviders = <T,>(Component: React.ComponentType<T>) => {
 }
 
 const App: React.FC = () => {
+  const { reauthenticate } = useActions();
+
+  useEffect(() => {
+    reauthenticate()
+  }, [])
 
   return (
     <Router>
@@ -38,18 +44,15 @@ const App: React.FC = () => {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/signin" component={SingIn} />
-          <Route exact path="/admin" component={Admin} />
-          <Route exact path="/admin/action" component={Action} />
-          <Route exact path="/admin/location" component={Location} />
-          <Route exact path="/admin/pet" component={Pet} />
-          <ProtectedRoute
-            path='/private'
-            isAuthenticated={false}
-            component={Pet}
-            authenticationPath={'/'}
-          />
+
+          <ProtectedRoute path="/admin" component={Admin} />
+          <ProtectedRoute exact path="/admin/action" component={Action} />
+          <ProtectedRoute exact path="/admin/location" component={Location} />
+          <ProtectedRoute exact path="/admin/pet" component={Pet} />
+
           <Redirect path="*" to="/" />
         </Switch>
+        <Footer />
       </div>
     </Router>
   );

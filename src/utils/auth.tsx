@@ -8,3 +8,9 @@ export const saveToken = (token: string) => {
         maxAge: 60 * 60 * 24,
     });
 }
+
+
+export const deleteToken = () => {
+    const cookies = new Cookies();
+    cookies.remove("EID_SES", { path: "/" });
+}

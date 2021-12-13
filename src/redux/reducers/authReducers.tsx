@@ -26,17 +26,18 @@ const reducer = (
     state: UserState = initialState,
     action: UserAction
 ): UserState => {
+    console.log(state, action)
     switch (action.type) {
         case UserActionType.AUTHENTICATE_REQUEST:
             return { ...state, loading: true }
         case UserActionType.AUTHENTICATE:
         case UserActionType.REAUTHENTICATE:
-            console.log(action.payload)
             return { loading: false, error: null, loggedIn: true, data: action.payload };
         case UserActionType.DEAUTHENTICATE:
-            return { loading: false, error: null, loggedIn: false, data: null };
         case UserActionType.AUTHENTICATE_INIT:
             return { ...initialState };
+        case UserActionType.AUTHENTICATE_FAIL:
+            return { ...state, loading: false, error: action.payload };
         default:
             return state;
     }

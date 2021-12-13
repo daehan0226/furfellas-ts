@@ -6,8 +6,7 @@ interface SessionAuthAction {
 }
 
 interface SessionDeAuthAction {
-    type: UserActionType.DEAUTHENTICATE,
-    payload: any,
+    type: UserActionType.DEAUTHENTICATE
 }
 
 interface SessionReAuthAction {

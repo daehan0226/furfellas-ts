@@ -20,7 +20,6 @@ const SingIn: React.FC<RouteComponentProps> = (props) => {
         if (auth.loggedIn) {
             props.history.push("/")
         }
-        console.log(auth)
     }, [auth])
 
     const validateInputs = () => {
