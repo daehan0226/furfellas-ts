@@ -3,6 +3,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { useActions } from '../hooks/useActions';
 import { useAppSelector } from '../hooks/useTypedSelector';
 import { Input, Button } from "../components/common";
+import { message } from 'antd';
 
 type LocationState = {
     nextPage?: string;
@@ -26,8 +27,14 @@ const SingIn: React.FC<WithLocatonState> = (props) => {
         authenticate({ username, password })
     }
 
+    const info = (name: string) => {
+        message.info(`Hi, ${name}`);
+    };
+
+
     useEffect(() => {
-        if (auth.loggedIn) {
+        if (auth.loggedIn && auth.data) {
+            info(auth.data.user)
             if (props.location.state && props.location.state.nextPage) {
                 props.history.push(props.location.state.nextPage)
             } else {

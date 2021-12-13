@@ -24,6 +24,7 @@ const HeaderLink = () => {
 
     const auth = useAppSelector((state) => state.auth);
     const { deauthenticate } = useActions();
+
     return (
         <LinkBox>
             {auth.loading ? (
