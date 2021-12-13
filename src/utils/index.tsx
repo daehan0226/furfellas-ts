@@ -1,4 +1,4 @@
-import { sortObjectsByStringKey, getCurrentStringDate, addMonthToCurrentDate, strfDatetime } from "./utils";
+import { sortObjectsByStringKey, getCurrentStringDate, addMonthToCurrentDate, strfDatetime, getParameterByName } from "./utils";
 import { saveToken, deleteToken } from "./auth";
 
 export {
@@ -7,5 +7,6 @@ export {
     addMonthToCurrentDate,
     strfDatetime,
     saveToken,
-    deleteToken
+    deleteToken,
+    getParameterByName
 }
