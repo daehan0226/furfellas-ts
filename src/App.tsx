@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 import './App.css';
 import './styles/styles.css';
-import { Header, Footer } from "./components/common"
+import { Header } from "./components/common/header"
+import { Footer } from "./components/common"
 import { Home, Admin } from "./pages"
 
 import { LocationContextProvider, ActionContextProvider, PetContextProvider } from './contexts';
