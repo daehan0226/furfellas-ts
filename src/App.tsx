@@ -43,7 +43,7 @@ const App: React.FC = () => {
         <Header />
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route exact path="/signin" component={SingIn} />
+          <Route path="/signin" component={SingIn} />
 
           <ProtectedRoute path="/admin" component={Admin} />
           <ProtectedRoute exact path="/admin/action" component={Action} />

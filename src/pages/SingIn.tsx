@@ -4,7 +4,17 @@ import { useActions } from '../hooks/useActions';
 import { useAppSelector } from '../hooks/useTypedSelector';
 import { Input, Button } from "../components/common";
 
-const SingIn: React.FC<RouteComponentProps> = (props) => {
+type LocationState = {
+    nextPage?: string;
+}
+
+type Mock = {
+    [key: string]: string | undefined;
+}
+
+type WithLocatonState = RouteComponentProps<Mock, Mock, LocationState>;
+
+const SingIn: React.FC<WithLocatonState> = (props) => {
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(true);
@@ -18,7 +28,11 @@ const SingIn: React.FC<RouteComponentProps> = (props) => {
 
     useEffect(() => {
         if (auth.loggedIn) {
-            props.history.push("/")
+            if (props.location.state && props.location.state.nextPage) {
+                props.history.push(props.location.state.nextPage)
+            } else {
+                props.history.push('/')
+            }
         }
     }, [auth])
 

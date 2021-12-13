@@ -8,12 +8,13 @@ type ProtectedRouteProps = {
 const ProtectedRoute = ({ authenticationPath = "/signin", ...routeProps }: ProtectedRouteProps) => {
     const auth = useAppSelector((state) => state.auth);
 
+
     if (auth.loggedIn) {
         return <Route {...routeProps} />;
-    } else {
-        return <Redirect to={{ pathname: authenticationPath }} />;
     }
-
+    else {
+        return <Redirect to={{ pathname: authenticationPath, state: { nextPage: routeProps.location?.pathname } }} />;
+    }
 };
 
 
