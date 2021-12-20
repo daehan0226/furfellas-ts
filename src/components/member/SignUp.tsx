@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { useActions } from '../hooks/useActions';
-import { useAppSelector } from '../hooks/useTypedSelector';
-import { Input, Button } from "../components/common";
+import { useActions } from '../../hooks/useActions';
+import { useAppSelector } from '../../hooks/useTypedSelector';
+import { Input, Button } from "../../components/common";
 import { message } from 'antd';
 
 type LocationState = {
@@ -16,9 +16,10 @@ type Mock = {
 type WithLocatonState = RouteComponentProps<Mock, Mock, LocationState>;
 
 
-const SingIn: React.FC<WithLocatonState> = (props) => {
+const SignUp: React.FC<WithLocatonState> = (props) => {
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const [err, setErr] = useState<string>("");
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(true);
 
     const auth = useAppSelector((state) => state.auth);
@@ -41,22 +42,23 @@ const SingIn: React.FC<WithLocatonState> = (props) => {
                 props.history.push('/')
             }
         }
+        if (auth.error) {
+            setErr(auth.error)
+        } else {
+            setErr('')
+        }
     }, [auth])
 
     const validateInputs = () => {
         setSubmitDisabled(true);
 
-        if (username === "") {
-            return;
+        if (username !== "" && password !== "") {
+            setSubmitDisabled(false)
         }
-
-        if (password === "") {
-            return;
-        }
-        setSubmitDisabled(false)
     }
 
     useEffect(() => {
+        setErr('')
         validateInputs()
     }, [username, password])
 
@@ -76,9 +78,10 @@ const SingIn: React.FC<WithLocatonState> = (props) => {
                 rules={[{ required: true, message: 'Please input your password!' }]}
                 type="password"
             />
-            <Button text={"Login"} onClick={handleSubmit} disabled={submitDisabled} />
+            {err && (<p>{err}</p>)}
+            <Button text={"Login"} onClick={handleSubmit} disabled={submitDisabled} loading={auth.loading} />
         </>
     )
 }
 
-export default SingIn;
+export default SignUp;

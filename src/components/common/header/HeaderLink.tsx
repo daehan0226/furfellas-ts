@@ -36,7 +36,7 @@ const HeaderLink = () => {
                         <LinkText onClick={() => { deauthenticate() }}>Log out</LinkText>
                     </LinkList>
                 ) : (
-                    <Link to="/signin">
+                    <Link to="/member/signin">
                         <LinkText>Sign In</LinkText>
                     </Link>
                 )

@@ -5,7 +5,7 @@ type ProtectedRouteProps = {
     authenticationPath?: string;
 } & RouteProps;
 
-const ProtectedRoute = ({ authenticationPath = "/signin", ...routeProps }: ProtectedRouteProps) => {
+const ProtectedRoute = ({ authenticationPath = "/member/signin", ...routeProps }: ProtectedRouteProps) => {
     const auth = useAppSelector((state) => state.auth);
 
     if (auth.loggedIn) {

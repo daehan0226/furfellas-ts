@@ -7,13 +7,13 @@ import styled from "styled-components";
 
 const Main = styled.main`
   width: 90%;
-  margin: 0px auto;
+  margin: 10px auto;
   min-height: 800px;
 `;
 
 
 const Containter = styled.div`
-    width: 100%
+    width: 100%;
 `;
 
 const Title = styled.h1`
@@ -39,7 +39,7 @@ const ComponentWithTitle = ({ Component, title }: ComponentProps) => {
 }
 
 
-const Home: React.FC<RouteComponentProps> = () => {
+const HomeLayout: React.FC<RouteComponentProps> = () => {
     return (
         <Main>
             <ComponentWithTitle title={"Profile"} Component={Profile} />
@@ -49,4 +49,4 @@ const Home: React.FC<RouteComponentProps> = () => {
     )
 }
 
-export default Home;
+export default HomeLayout;

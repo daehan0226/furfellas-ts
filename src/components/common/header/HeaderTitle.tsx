@@ -12,7 +12,7 @@ const Title = styled.h1`
 const HeaderTitle = () => {
     return (
         <TitleBox>
-            <Link to="/signin">
+            <Link to="/">
                 <Title>
                     Furfellas
                 </Title>
