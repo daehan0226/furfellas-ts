@@ -11,5 +11,5 @@ export default interface Photo {
     pets: Pet[];
     thumbnail: string;
     upload_datetime: string;
-    user: User
+    user: User;
 }
