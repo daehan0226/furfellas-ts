@@ -39,10 +39,6 @@ const TodoTable: React.FC = () => {
     const [datetimeEnd, setDatetimeEnd] = useState<string>(strfDatetime(addMonthToCurrentDate(1)));
 
     useEffect(() => {
-        fetchTodos()
-    }, [])
-
-    useEffect(() => {
         fetchTodos(datetimeBegin, datetimeEnd)
     }, [datetimeBegin, datetimeEnd])
 
@@ -63,6 +59,7 @@ const TodoTable: React.FC = () => {
                 <DateSelect title="End Date" date={datetimeEnd} setDate={setDatetimeEnd} />
             </DateContainer>
             <Table
+                key={"id"}
                 bordered
                 dataSource={todos}
                 columns={columns}
