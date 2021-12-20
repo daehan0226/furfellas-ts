@@ -1,7 +1,21 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Input as AntInput, InputProps as AntdInputProps } from 'antd';
+import styled from "styled-components";
 
 
+const CustomAntInput = styled(AntInput)`
+`
+
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+`
+
+const ErrMsgBox = styled.div`
+    height: 24px;
+    color: ${({ theme }) => theme.colors.common.error};
+`
 
 interface InputProps extends AntdInputProps {
     rules?: [{
@@ -12,12 +26,9 @@ interface InputProps extends AntdInputProps {
 
 const Input: React.FC<InputProps> = ({ onChange = () => { }, placeholder = "", value = "", disabled = false, type = "text", rules = [] }) => {
     const [err, setErr] = useState<string>("");
+    const [didMount, setDidMount] = useState<boolean>(false)
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        onChange(e)
-    }
-
-    const handleBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const validate = () => {
         for (const rule of rules) {
             if (rule.required) {
                 value === "" ? setErr(rule.message) : setErr("")
@@ -25,11 +36,29 @@ const Input: React.FC<InputProps> = ({ onChange = () => { }, placeholder = "", v
         }
     }
 
+    useEffect(() => {
+        setDidMount(true)
+    }, [])
+
+    useEffect(() => {
+        if (didMount) {
+            validate()
+        }
+    }, [value])
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        onChange(e)
+    }
+
+    const handleBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
+        validate()
+    }
+
     return (
-        <>
-            <AntInput placeholder={placeholder} value={value} disabled={disabled} allowClear onChange={handleChange} onBlur={handleBlur} type={type} />
-            {err && <p>{err}</p>}
-        </>
+        <Container>
+            <CustomAntInput placeholder={placeholder} value={value} disabled={disabled} allowClear onChange={handleChange} onBlur={handleBlur} type={type} />
+            <ErrMsgBox>{err}</ErrMsgBox>
+        </Container>
     );
 };
 

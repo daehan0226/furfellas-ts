@@ -5,9 +5,9 @@ interface ButtonProps extends AntdButtonProps {
     onClick?: () => void;
 }
 
-const Button: React.FC<ButtonProps> = ({ text, onClick = () => { }, name = "", type = "primary", disabled = false, danger = false }) => {
+const Button: React.FC<ButtonProps> = ({ text, onClick = () => { }, name = "", type = "primary", disabled = false, danger = false, loading = false }) => {
     return (
-        <AntdButton type={type} name={name} onClick={() => onClick()} disabled={disabled} danger={danger}>
+        <AntdButton type={type} name={name} onClick={() => onClick()} disabled={disabled} danger={danger} loading={loading}>
             {text}
         </AntdButton>
     );
