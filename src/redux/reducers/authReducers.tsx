@@ -26,7 +26,6 @@ const reducer = (
     state: UserState = initialState,
     action: UserAction
 ): UserState => {
-    console.log(state, action)
     switch (action.type) {
         case UserActionType.AUTHENTICATE_REQUEST:
             return { ...state, loading: true }

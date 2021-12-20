@@ -15,6 +15,7 @@ type Mock = {
 
 type WithLocatonState = RouteComponentProps<Mock, Mock, LocationState>;
 
+
 const SingIn: React.FC<WithLocatonState> = (props) => {
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
@@ -31,7 +32,6 @@ const SingIn: React.FC<WithLocatonState> = (props) => {
         message.info(`Hi, ${name}`);
     };
 
-
     useEffect(() => {
         if (auth.loggedIn && auth.data) {
             info(auth.data.user)
@@ -46,11 +46,11 @@ const SingIn: React.FC<WithLocatonState> = (props) => {
     const validateInputs = () => {
         setSubmitDisabled(true);
 
-        if (username === "" || username.length < 2) {
+        if (username === "") {
             return;
         }
 
-        if (password === "" || password.length < 2) {
+        if (password === "") {
             return;
         }
         setSubmitDisabled(false)
@@ -63,8 +63,19 @@ const SingIn: React.FC<WithLocatonState> = (props) => {
     return (
         <>
             <h1>Sign in</h1>
-            <Input placeholder="username" value={username} onChange={(e) => { setUsername(e.target.value) }} />
-            <Input placeholder="password" value={password} onChange={(e) => { setPassword(e.target.value) }} type="password" />
+            <Input
+                placeholder="username"
+                value={username}
+                onChange={(e) => { setUsername(e.target.value) }}
+                rules={[{ required: true, message: 'Please input your username!' }]}
+            />
+            <Input
+                placeholder="password"
+                value={password}
+                onChange={(e) => { setPassword(e.target.value) }}
+                rules={[{ required: true, message: 'Please input your password!' }]}
+                type="password"
+            />
             <Button text={"Login"} onClick={handleSubmit} disabled={submitDisabled} />
         </>
     )

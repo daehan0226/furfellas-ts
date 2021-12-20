@@ -1,7 +1,5 @@
 import styled from "styled-components";
 import { Pet } from "../../../models"
-// import { FlexCenterBox } from "../../styles/common-styles";
-// import { changeToDisplayStringDatetime } from "../../utils/utils";
 
 const Container = styled.div``;
 
@@ -18,6 +16,7 @@ const Wrapper = styled.div`
 
 const ImageWrapper = styled.div`
   display: flex;
+  justify-content: center;
 `;
 
 const Image = styled.img`
