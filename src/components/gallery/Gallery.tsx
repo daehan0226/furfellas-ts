@@ -8,14 +8,19 @@ import { Radio } from 'antd';
 import PhotoGallery from './PhotoGallery';
 import { Photo as IPhoto } from "../../models";
 import SlideGallery from './SlideGallery';
+import { Tag } from "../common"
 
 const Container = styled.div`
 `;
 
-const FilterContainer = styled.div`
-`;
+const SubContainer = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0px 10px;
 
-const DateSelectContainer = styled.div`
+    > * {
+        margin: 5px;
+    }
 `;
 
 
@@ -40,6 +45,7 @@ const Gallery: React.FC = () => {
     })
     const [displayType, setDisplayType] = useState<IDisplayType>('slide')
     const [photos, setPhotos] = useState<IPhoto[]>([])
+    const [sort, setSort] = useState("asc");
 
     const actionState = useActionState();
     const locationState = useLocationState();
@@ -80,9 +86,19 @@ const Gallery: React.FC = () => {
         setDisplayType(value)
     }
 
+    useEffect(() => {
+        let sorted = [];
+        if (sort === "asc") {
+            sorted = photos.sort((a, b) => (a.create_datetime > b.create_datetime ? 1 : -1));
+        } else {
+            sorted = photos.sort((a, b) => (a.create_datetime < b.create_datetime ? 1 : -1));
+        }
+        setPhotos([...sorted]);
+    }, [sort]);
+
     return (
         <Container>
-            <FilterContainer>
+            <SubContainer>
                 <TagSelect
                     placeholder="Choose actions"
                     onChange={(data) => handleSelectedItemChange("actions", data)}
@@ -98,8 +114,8 @@ const Gallery: React.FC = () => {
                     onChange={(data) => handleSelectedItemChange("pets", data)}
                     options={petState.items}
                 />
-            </FilterContainer>
-            <DateSelectContainer>
+            </SubContainer>
+            <SubContainer>
                 <DateSelect
                     title="Start Date"
                     date={dateInfo.begin}
@@ -110,11 +126,21 @@ const Gallery: React.FC = () => {
                     date={dateInfo.end}
                     setDate={(date) => handleSelectedDateChange("end", date)}
                 />
-            </DateSelectContainer>
-            <Radio.Group defaultValue="slide" buttonStyle="solid" onChange={(e) => handleTypeChange(e.target.value)} >
-                <Radio.Button value="slide">Slide</Radio.Button>
-                <Radio.Button value="gallery">Gallery</Radio.Button>
-            </Radio.Group>
+            </SubContainer>
+            <SubContainer>
+                <Radio.Group defaultValue="slide" buttonStyle="solid" onChange={(e) => handleTypeChange(e.target.value)} >
+                    <Radio.Button value="slide">Slide</Radio.Button>
+                    <Radio.Button value="gallery">Gallery</Radio.Button>
+                </Radio.Group>
+            </SubContainer>
+            <SubContainer>
+                <Tag
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => { setSort(sort === 'asc' ? 'desc' : 'asc') }}
+                    color="success"
+                    text={`From ${sort === 'asc' ? "old" : "new"} Photos`}
+                />
+            </SubContainer>
             <ImageContainer>
                 {displayType === 'slide' ? (
                     <SlideGallery items={photos} />

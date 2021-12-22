@@ -19,7 +19,7 @@ const TagSelect: FC<TagSelectProps> = ({ placeholder, onChange, options }) => {
 
 
     return (
-        <Select mode="tags" style={{ width: '100%' }} placeholder={placeholder} onChange={handleChange}
+        <Select mode="tags" style={{ width: '100%', maxWidth: 300 }} placeholder={placeholder} onChange={handleChange}
         >
             {options.map(({ id, name, color }) => (
                 <Option key={`${id}-${name}`} value={id.toString()} style={{ color: `#${color}` }} >{name}</Option>
