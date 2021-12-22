@@ -9,6 +9,10 @@ import { Divider } from 'antd';
 const Container = styled.section`
     width: 320px;
     margin: 10px auto;
+    
+    ${({ theme }) => theme.media.phone`
+        width: 100%;
+    `}
 `;
 
 const ListBox = styled.ul`
