@@ -1,19 +1,21 @@
 import styled from "styled-components";
-
+import { PetList } from '.';
 
 const Container = styled.div`
+    width: 90%;
+    margin: 10px auto;
+    
+    ${({ theme }) => theme.media.phone`
+        width: 100%;
+    `}
 `;
-const Title = styled.h2`
-`;
 
-
-const Pet: React.FC = () => {
-
+const AdminPet = () => {
     return (
         <Container>
-            <Title>Pet</Title>
+            <PetList />
         </Container>
     );
 };
 
-export default Pet;
+export default AdminPet;
