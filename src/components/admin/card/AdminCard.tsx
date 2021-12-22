@@ -12,7 +12,7 @@ const Container = styled.article`
 
 interface AdminCardProps {
     title: string;
-    data: any;
+    data: any[];
     link: string;
 }
 
@@ -35,7 +35,7 @@ const AdminCard: React.FC<AdminCardProps> = ({ title, data, link }) => {
         <Container>
             <CardTitle>{capitalizeFirstLetter(title)}</CardTitle>
             <CardBody>
-                {title} count : {data}
+                {title} count : {data.length}
             </CardBody>
             <CardAction>
                 <Link to={link}><SettingOutlined key="setting" /></Link>

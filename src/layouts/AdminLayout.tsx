@@ -7,6 +7,7 @@ import styled from "styled-components";
 import { ProtectedRoute } from '../hoc';
 import { useEffect, useState } from 'react';
 import { capitalizeFirstLetter } from '../utils';
+import { useActionState, useLocationState, usePetState } from '../contexts';
 
 
 const Main = styled.main`
@@ -31,25 +32,29 @@ const LinkText = styled.h2`
 
 const Admin: React.FC<RouteComponentProps> = ({ match }) => {
 
+    const actionState = useActionState();
+    const locationState = useLocationState();
+    const petState = usePetState();
+
     const routes = [
         {
             title: 'action',
-            data: 0,
+            data: actionState.items,
             link: '/admin/action'
         },
         {
             title: 'location',
-            data: 0,
+            data: locationState.items,
             link: '/admin/location'
         },
         {
             title: 'pet',
-            data: 0,
+            data: petState.items,
             link: '/admin/pet'
         },
         {
             title: 'photo',
-            data: 0,
+            data: petState.items,
             link: '/admin/photo'
         },
     ]
