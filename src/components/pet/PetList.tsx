@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, List, Avatar } from 'antd';
+import moment from 'moment';
 import { PetForm } from "./";
 import styled from "styled-components";
 import { usePetState } from '../../contexts';
@@ -11,6 +12,19 @@ const Container = styled.div`
     
     ${({ theme }) => theme.media.phone`
         width: 100%;
+    `}
+`;
+
+
+const BtnBox = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    > * {
+        margin: 5px;
+    }
+    
+    ${({ theme }) => theme.media.phone`
+        flex-direction: column;
     `}
 `;
 
@@ -31,39 +45,35 @@ const initialValues = {
 const PetList = () => {
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     const [editKey, setEditKey] = useState<number>(-1);
-    const [formValues, setFormValues] = useState<IPet>(initialValues);
     const [pet, setPet] = useState<IPet>(initialValues);
     const petState = usePetState();
 
-    useEffect(() => {
-        setEditKey(-1)
-    }, [])
-
-    const showModal = () => {
-        setEditKey(0)
-        setIsModalVisible(true);
-    };
-
     const handleOk = () => {
         setIsModalVisible(false);
-        setEditKey(-1)
     };
 
     const handleCancel = () => {
         setIsModalVisible(false);
-        setEditKey(-1)
     };
 
+    const setPetDataForm = (pet: IPet) => {
+        if (typeof pet["birthday"] === 'string') {
+            pet["birthday"] = moment(pet.birthday.slice(0, 10), 'YYYY-MM-DD')
+        }
+        return pet
+    }
+
     useEffect(() => {
-        if (editKey) {
+        setPet({ ...initialValues })
+        if (isModalVisible) {
             const editPet = petState.items.find(item => item.id === editKey)
             if (editPet && editPet.id) {
-                setPet({ ...editPet })
+                setPet({ ...setPetDataForm(editPet) })
             }
         } else {
-            setPet({ ...initialValues })
+            setEditKey(-1)
         }
-    }, [editKey])
+    }, [isModalVisible])
 
     const handleEdit = (id: number) => {
         setEditKey(id)
@@ -71,12 +81,12 @@ const PetList = () => {
     };
 
     const handleDelete = () => {
-        setEditKey(-1)
+        setIsModalVisible(false);
     };
 
     return (
         <Container>
-            <Button type="primary" onClick={showModal}>
+            <Button type="primary" onClick={() => setIsModalVisible(true)}>
                 Add a new pet
             </Button>
             <List
@@ -89,23 +99,15 @@ const PetList = () => {
                             title={<p>{item.name}</p>}
                             description={item.intro}
                         />
-                        <List.Item
-                            actions={[
-                                <a
-                                    key="list-loadmore-edit"
-                                    onClick={() => handleEdit(item.id)}>
-                                    edit
-                                </a>,
-                                <a key="list-loadmore-delete">
-                                    delete
-                                </a>]}
-                        ></List.Item>
+                        <BtnBox>
+                            <Button onClick={() => handleEdit(item.id)}>Edit </Button>
+                            <Button >Delete </Button>
+                        </BtnBox>
                     </List.Item>
                 )}
             />
-
             <Modal title="Pet" visible={isModalVisible} onCancel={handleCancel} onOk={handleOk} >
-                <PetForm data={pet} setFormValues={setFormValues} />
+                <PetForm data={pet} setFormValues={setPet} />
             </Modal>
         </Container>
     );

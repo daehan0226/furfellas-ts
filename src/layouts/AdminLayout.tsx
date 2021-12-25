@@ -62,7 +62,7 @@ const Admin: React.FC<RouteComponentProps> = ({ match }) => {
     return (
         <CardContainer>
             {routes.map(({ title, data, link }) => (
-                <AdminCard title={title} data={data} link={link} />
+                <AdminCard key={title} title={title} data={data} link={link} />
             ))}
         </CardContainer>
     )

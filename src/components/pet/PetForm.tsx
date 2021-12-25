@@ -22,14 +22,12 @@ const PetForm: React.FC<PetFormProps> = ({ data, setFormValues }) => {
     const [photoOptions, setPhotoOptions] = useState([]);
 
     useEffect(() => {
-        console.log(data)
-        form.setFieldsValue({ data })
-    }, [data, form])
+        form.setFieldsValue({ ...data })
+    }, [data])
 
     const handleValueChange = () => {
         const values = form.getFieldsValue()
-        console.log(values)
-        // setFormValues({ ...form.getFieldsValue() })
+        setFormValues({ ...values })
     }
 
     return (
@@ -52,14 +50,14 @@ const PetForm: React.FC<PetFormProps> = ({ data, setFormValues }) => {
                 <Form.Item name="intro" label="Introdction">
                     <Input />
                 </Form.Item>
-                <Form.Item label="Image" name="photo_id">
-                    <Select size="large" >
-                        {/* <Select.Option value={null}>Pick from photos</Select.Option>
+                {/* <Form.Item label="Image" name="photoid">
+                    <Select size="large" > */}
+                {/* <Select.Option value={null}>Pick from photos</Select.Option>
                         {photoOptions.map(option => (
                             <Select.Option key={option.id} value={option.id}><Avatar src={option.thumbnail} size={64} /></Select.Option>
                         ))} */}
-                    </Select>
-                </Form.Item>
+                {/* </Select>
+                </Form.Item> */}
                 <Form.Item label="Birthday" name="birthday">
                     <DatePicker />
                 </Form.Item>
