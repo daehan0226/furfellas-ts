@@ -12,6 +12,7 @@ import { ProtectedRoute } from './hoc';
 import { Provider } from 'react-redux'
 import { store } from './redux'
 import { useActions } from './hooks/useActions';
+import ScrollToTop from './hooks/ScrollToTop';
 
 const withProviders = <T,>(Component: React.ComponentType<T>) => {
   return (props: T) => (
@@ -39,6 +40,7 @@ const App: React.FC = () => {
   return (
     <Router>
       <div className="App">
+        <ScrollToTop />
         <Header />
         <Switch>
           <Route path="/member" component={MemberLayout} />
