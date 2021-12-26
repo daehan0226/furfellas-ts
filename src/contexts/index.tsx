@@ -1,6 +1,7 @@
 import { useLocationState, useLocationDispatch, LocationContextProvider } from "./location";
 import { ActionContextProvider, useActionDispatch, useActionState } from "./action";
 import { PetContextProvider, usePetDispatch, usePetState } from "./pet";
+import { PhotoContextProvider, usePhotoDispatch, usePhotoState } from "./photo";
 
 export {
   LocationContextProvider,
@@ -8,5 +9,7 @@ export {
   ActionContextProvider,
   useActionDispatch, useActionState,
   PetContextProvider,
-  usePetDispatch, usePetState
+  usePetDispatch, usePetState,
+  PhotoContextProvider,
+  usePhotoDispatch, usePhotoState
 };

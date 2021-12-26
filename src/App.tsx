@@ -6,7 +6,7 @@ import { Header } from "./components/common/header"
 import { Footer } from "./components/common"
 import { HomeLayout, AdminLayout, MemberLayout } from "./layouts"
 
-import { LocationContextProvider, ActionContextProvider, PetContextProvider } from './contexts';
+import { LocationContextProvider, ActionContextProvider, PetContextProvider, PhotoContextProvider } from './contexts';
 import { ProtectedRoute } from './hoc';
 
 import { Provider } from 'react-redux'
@@ -16,13 +16,15 @@ import { useActions } from './hooks/useActions';
 const withProviders = <T,>(Component: React.ComponentType<T>) => {
   return (props: T) => (
     <Provider store={store}>
-      <LocationContextProvider>
-        <ActionContextProvider>
-          <PetContextProvider>
-            <Component {...props} />
-          </PetContextProvider>
-        </ActionContextProvider>
-      </LocationContextProvider>
+      <PhotoContextProvider>
+        <LocationContextProvider>
+          <ActionContextProvider>
+            <PetContextProvider>
+              <Component {...props} />
+            </PetContextProvider>
+          </ActionContextProvider>
+        </LocationContextProvider>
+      </PhotoContextProvider>
     </Provider>
   );
 }
