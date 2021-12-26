@@ -7,7 +7,7 @@ export interface Photo {
     description: string;
     image_id?: string;
     location: Location;
-    original?: string;
+    original: string;
     pets: Pet[];
     thumbnail?: string;
     upload_datetime?: string;
