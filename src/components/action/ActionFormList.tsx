@@ -7,16 +7,17 @@ import { Divider } from 'antd';
 import { MainApi } from "../../ApiService";
 import request from "axios";
 import { Buttons, ErrMsgBox } from "../../styles/common"
+import {themeProps} from "../../styles/theme"
 
 const CustomDivider = styled(Divider)`
-    ${({ theme }) => theme.media.phone`
+    ${({ theme }: themeProps) => theme.media.phone`
         margin: 320px;
     `}
 `
 
 const Container = styled.section`
     margin: 10px auto;
-    ${({ theme }) => theme.media.phone`
+    ${({ theme }: themeProps) => theme.media.phone`
         width: 100%;
     `}
 `;
@@ -27,7 +28,7 @@ const ListBox = styled.ul`
     justify-content: center;
     align-items: center;
 
-    ${({ theme }) => theme.media.phone`
+    ${({ theme }: themeProps) => theme.media.phone`
         width: 100%;
         flex-direction: column;
     `}
@@ -36,7 +37,7 @@ const ListBox = styled.ul`
 const List = styled.li`
     width: 320px;
     margin: 10px;
-    ${({ theme }) => theme.media.phone`
+    ${({ theme }: themeProps) => theme.media.phone`
         width: 100%;
         margin: 5px;
     `}
@@ -46,7 +47,7 @@ const DetailBox = styled.div`
     display: flex;
     margin: 10px;
     justify-content: space-between;
-    ${({ theme }) => theme.media.phone`
+    ${({ theme }: themeProps) => theme.media.phone`
         width: 100%;
         margin: 0px;
     `}
