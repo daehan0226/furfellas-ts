@@ -1,15 +1,21 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { ActionForm } from ".";
-import { Button } from "../common"
-import { useActionState } from "../../contexts";
+import { Button, PopUpDeleteButton } from "../common"
+import { useActionDispatch, useActionState } from "../../contexts";
 import { Divider } from 'antd';
+import { MainApi } from "../../ApiService";
+import request from "axios";
+import { Buttons, ErrMsgBox } from "../../styles/common"
 
+const CustomDivider = styled(Divider)`
+    ${({ theme }) => theme.media.phone`
+        margin: 320px;
+    `}
+`
 
 const Container = styled.section`
-    width: 320px;
     margin: 10px auto;
-    
     ${({ theme }) => theme.media.phone`
         width: 100%;
     `}
@@ -17,19 +23,39 @@ const Container = styled.section`
 
 const ListBox = styled.ul`
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
     align-items: center;
+
+    ${({ theme }) => theme.media.phone`
+        width: 100%;
+        flex-direction: column;
+    `}
 `;
 
 const List = styled.li`
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
+    width: 320px;
+    margin: 10px;
+    ${({ theme }) => theme.media.phone`
+        width: 100%;
+        margin: 5px;
+    `}
 `;
 
-const Header = styled.div`
+const DetailBox = styled.div`
     display: flex;
-    justify-content: end;
+    margin: 10px;
+    justify-content: space-between;
+    ${({ theme }) => theme.media.phone`
+        width: 100%;
+        margin: 0px;
+    `}
+    
+`;
+
+const SubContainer = styled.div`
+    display: flex;
+    justify-content: center;
     margin-bottom: 10px;
 `;
 
@@ -42,37 +68,69 @@ const initialActionValue = {
 
 const ActionFormList: React.FC = () => {
     const [editKey, setEditKey] = useState<IEditKey>(null);
+    const [errMsg, setErrMsg] = useState<string>("");
 
     const actionState = useActionState();
+    const actionDispatch = useActionDispatch();
 
     const finishForm = () => {
         setEditKey(null)
     }
 
+    const handleDelete = async (id: number) => {
+        const result = await handleDeleteAction(id)
+        if (result) {
+            finishForm()
+        }
+    }
+
+    const handleDeleteAction = async (id: number) => {
+        try {
+            const api = MainApi.getInstance()
+            const response = await api.deleteAction(id)
+            if (response.status === 204) {
+                actionDispatch({ type: 'DELETE', payload: { id } })
+                return true
+            }
+
+        } catch (e) {
+            if (request.isAxiosError(e) && e.response) {
+                setErrMsg(e.response.data.message)
+                return false
+            }
+        }
+    }
+
     return (
         <Container>
-            <Header>
+            <Divider />
+            <SubContainer>
                 {editKey === 0 ? (
                     <ActionForm data={initialActionValue} onFinish={finishForm} />
                 ) : (
                     <Button text={"New Action"} onClick={() => { setEditKey(0) }} />
                 )}
-            </Header>
-            <Divider />
+            </SubContainer>
             <ListBox>
                 {actionState.items.map((action) => (
                     <>
                         {editKey === action.id ? (
-                            <List>
-                                <ActionForm data={action} onFinish={finishForm} />
-                            </List>
+                            <ActionForm data={action} onFinish={finishForm} />
                         ) : (
                             <List>
-                                <p key={action.id}>{action.name}</p>
-                                <Button text={"Edit"} onClick={() => { setEditKey(action.id) }} />
+                                <DetailBox>
+                                    <p key={action.id}>{action.name}</p>
+
+                                    <Buttons>
+                                        <Button text={"Edit"} onClick={() => { setEditKey(action.id) }} />
+                                        <PopUpDeleteButton id={action.id} name={action.name} confirmAction={handleDelete} />
+                                    </Buttons>
+                                </DetailBox>
+                                {errMsg && <ErrMsgBox>{errMsg}</ErrMsgBox>}
+                                <CustomDivider style={{ margin: '6px 0' }} />
                             </List>
                         )}
-                        <Divider style={{ margin: '6px 0' }} />
+
                     </>
                 ))}
             </ListBox>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Input as AntInput, InputProps as AntdInputProps } from 'antd';
 import styled from "styled-components";
-
+import { ErrMsgBox } from "../../styles/common"
 
 const CustomAntInput = styled(AntInput)`
 `
@@ -10,11 +10,10 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-`
-
-const ErrMsgBox = styled.div`
-    height: 24px;
-    color: ${({ theme }) => theme.colors.common.error};
+    
+    ${({ theme }) => theme.media.phone`    
+        width: 220px;
+    `}
 `
 
 interface InputProps extends AntdInputProps {
@@ -24,7 +23,7 @@ interface InputProps extends AntdInputProps {
     }]
 }
 
-const Input: React.FC<InputProps> = ({ onChange = () => { }, placeholder = "", value = "", disabled = false, type = "text", rules = [] }) => {
+const Input: React.FC<InputProps> = ({ onChange = () => { }, placeholder = "", value = "", disabled = false, type = "text", rules = [], size = "middle" }) => {
     const [err, setErr] = useState<string>("");
     const [didMount, setDidMount] = useState<boolean>(false)
 
@@ -56,7 +55,7 @@ const Input: React.FC<InputProps> = ({ onChange = () => { }, placeholder = "", v
 
     return (
         <Container>
-            <CustomAntInput placeholder={placeholder} value={value} disabled={disabled} allowClear onChange={handleChange} onBlur={handleBlur} type={type} />
+            <CustomAntInput placeholder={placeholder} value={value} disabled={disabled} allowClear onChange={handleChange} onBlur={handleBlur} type={type} size={size} />
             <ErrMsgBox>{err}</ErrMsgBox>
         </Container>
     );
