@@ -118,21 +118,12 @@ const ActionForm: React.FC<ActionFormProps> = ({ data, onFinish }) => {
             />
             {errMsg && <ErrMsgBox>{errMsg}</ErrMsgBox>}
             <Buttons>
-                {data.id === 0 ? (
-                    <Button
-                        text={"Add"}
-                        onClick={handleSubmit}
-                        disabled={submitDisabled}
-                        size={"small"}
-                    />
-                ) : (
-                    <Button
-                        text={"Update"}
-                        onClick={handleSubmit}
-                        disabled={submitDisabled}
-                        size={"small"}
-                    />
-                )}
+                <Button
+                    text={data.id === 0 ? "Add" : "Update"}
+                    onClick={handleSubmit}
+                    disabled={submitDisabled}
+                    size={"small"}
+                />
                 <Button
                     text={"Cancel"}
                     type={"default"}

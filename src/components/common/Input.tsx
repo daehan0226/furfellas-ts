@@ -11,7 +11,7 @@ const Container = styled.div`
     flex-direction: column;
     align-items: flex-start;
     
-    ${({ theme }) => theme.media.phone`    
+    ${({ theme }) => theme.media.phone`
         width: 220px;
     `}
 `
@@ -23,7 +23,7 @@ interface InputProps extends AntdInputProps {
     }]
 }
 
-const Input: React.FC<InputProps> = ({ onChange = () => { }, placeholder = "", value = "", disabled = false, type = "text", rules = [], size = "middle" }) => {
+const Input: React.FC<InputProps> = ({ onChange = () => {}, placeholder = "", value = "", disabled = false, type = "text", rules = [], size = "middle" }) => {
     const [err, setErr] = useState<string>("");
     const [didMount, setDidMount] = useState<boolean>(false)
 
@@ -55,7 +55,16 @@ const Input: React.FC<InputProps> = ({ onChange = () => { }, placeholder = "", v
 
     return (
         <Container>
-            <CustomAntInput placeholder={placeholder} value={value} disabled={disabled} allowClear onChange={handleChange} onBlur={handleBlur} type={type} size={size} />
+            <CustomAntInput
+                placeholder={placeholder}
+                value={value}
+                disabled={disabled}
+                allowClear
+                onChange={handleChange}
+                onBlur={handleBlur}
+                type={type}
+                size={size}
+            />
             <ErrMsgBox>{err}</ErrMsgBox>
         </Container>
     );

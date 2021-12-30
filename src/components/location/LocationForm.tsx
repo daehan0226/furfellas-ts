@@ -7,22 +7,16 @@ import { useLocationDispatch, useLocationState } from "../../contexts";
 import { Location as ILocation } from "../../models";
 import { createQueryParams } from "../../utils/utils";
 import { Button, Input } from "../common"
+import { ErrMsgBox, Buttons } from "../../styles/common"
 
 const Container = styled.div`
     margin: 10px auto;
     width: 320px;
+    ${({ theme }) => theme.media.phone`    
+        flex-direction: column;
+    `}
 `;
 
-
-const ErrorMsg = styled.span`
-    color: ${({ theme }) => theme.colors.common.error};
-`
-
-const Buttons = styled.div`
-    display: flex;
-    margin-top: 10px;
-    justify-content: space-around;
-`
 
 interface LocationFormProps {
     data: ILocation,
@@ -102,13 +96,6 @@ const LocationForm: React.FC<LocationFormProps> = ({ data, onFinish }) => {
         onFinish()
     }
 
-    const handleDelete = async () => {
-        const result = await handleDeleteLocation(data.id)
-        if (result) {
-            onFinish()
-        }
-    }
-
     const checkDuplicates = (newName: string) => {
         if (data.name === newName) {
             return;
@@ -137,28 +124,29 @@ const LocationForm: React.FC<LocationFormProps> = ({ data, onFinish }) => {
 
     }, [value, errMsg])
 
-    const DeleteButton = () => {
-        return (
-            <Popconfirm title={`Are you sure to delete ${data.name}？`} okText="Yes" onConfirm={handleDelete} cancelText="No">
-                <Button text={"Delete"} danger={true} />
-            </Popconfirm>
-        )
-    }
 
     return (
         <Container>
-            <Input value={value} onChange={e => setValue(e.target.value)} placeholder={data.name || "New location"} />
-            {errMsg && <ErrorMsg>{errMsg}</ErrorMsg>}
+            <Input
+                value={value}
+                onChange={e => setValue(e.target.value)}
+                placeholder={data.name || "New location"}
+                size={"small"}
+            />
+            {errMsg && <ErrMsgBox>{errMsg}</ErrMsgBox>}
             <Buttons>
-                {data.id === 0 ? (
-                    <Button text={"Add"} onClick={handleSubmit} disabled={submitDisabled} />
-                ) : (
-                    <>
-                        <Button text={"Update"} onClick={handleSubmit} disabled={submitDisabled} />
-                        <DeleteButton />
-                    </>
-                )}
-                <Button text={"Cancel"} type={"default"} onClick={handleCancel} />
+                <Button
+                    text={data.id === 0 ? "Add" : "Update"}
+                    onClick={handleSubmit}
+                    disabled={submitDisabled}
+                    size={"small"}
+                />
+                <Button
+                    text={"Cancel"}
+                    type={"default"}
+                    onClick={handleCancel}
+                    size={"small"}
+                />
             </Buttons>
         </Container>
     );

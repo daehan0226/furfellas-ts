@@ -120,7 +120,6 @@ const ActionFormList: React.FC = () => {
                             <List>
                                 <DetailBox>
                                     <p key={action.id}>{action.name}</p>
-
                                     <Buttons>
                                         <Button text={"Edit"} onClick={() => { setEditKey(action.id) }} />
                                         <PopUpDeleteButton id={action.id} name={action.name} confirmAction={handleDelete} />
