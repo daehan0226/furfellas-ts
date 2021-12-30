@@ -62,6 +62,12 @@ const SignIn: React.FC<WithLocatonState> = (props) => {
         validateInputs()
     }, [username, password])
 
+    const handlePressEnter = () => {
+        if (!submitDisabled) {
+            handleSubmit()   
+        }
+    }
+
     return (
         <>
             <h1>Sign in</h1>
@@ -77,6 +83,7 @@ const SignIn: React.FC<WithLocatonState> = (props) => {
                 onChange={(e) => { setPassword(e.target.value) }}
                 rules={[{ required: true, message: 'Please input your password!' }]}
                 type="password"
+                enterKeyCallback={()=>handlePressEnter()}
             />
             {err && (<p>{err}</p>)}
             <Button text={"Login"} onClick={handleSubmit} disabled={submitDisabled} loading={auth.loading} />

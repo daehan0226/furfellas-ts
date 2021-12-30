@@ -13,6 +13,7 @@ const Container = styled.div`
     
     ${({ theme }) => theme.media.phone`
         width: 220px;
+        margin: 0 auto;
     `}
 `
 
@@ -20,10 +21,20 @@ interface InputProps extends AntdInputProps {
     rules?: [{
         required: boolean,
         message: string
-    }]
+    }],
+    enterKeyCallback?: () => void
 }
 
-const Input: React.FC<InputProps> = ({ onChange = () => {}, placeholder = "", value = "", disabled = false, type = "text", rules = [], size = "middle" }) => {
+const Input: React.FC<InputProps> = ({ 
+    onChange = () => {}, 
+    placeholder = "", 
+    value = "", 
+    disabled = false, 
+    type = "text", 
+    rules = [], 
+    size = "middle",
+    enterKeyCallback = () => {}
+}) => {
     const [err, setErr] = useState<string>("");
     const [didMount, setDidMount] = useState<boolean>(false)
 
@@ -53,6 +64,12 @@ const Input: React.FC<InputProps> = ({ onChange = () => {}, placeholder = "", va
         validate()
     }
 
+    const handlePress = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        if (e.key === 'Enter') {
+            enterKeyCallback()
+        }
+    }
+
     return (
         <Container>
             <CustomAntInput
@@ -64,6 +81,7 @@ const Input: React.FC<InputProps> = ({ onChange = () => {}, placeholder = "", va
                 onBlur={handleBlur}
                 type={type}
                 size={size}
+                onPressEnter={handlePress}
             />
             <ErrMsgBox>{err}</ErrMsgBox>
         </Container>
