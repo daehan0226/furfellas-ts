@@ -1,9 +1,10 @@
-
 import styled from "styled-components";
+import {themeProps} from "./theme"
+
 
 export const ErrMsgBox = styled.div`
     height: 24px;
-    color: ${({ theme }) => theme.colors.common.error};
+    color: ${({ theme }: themeProps) => theme.colors.common.error};
 `
 
 export const Buttons = styled.div`
