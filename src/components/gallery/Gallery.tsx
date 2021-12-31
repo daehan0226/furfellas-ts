@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
-import { useActionState, useLocationState, usePetState } from '../../contexts';
 import { createQueryParams, getCurrentStringDate, strfDatetime, addMonthToCurrentDate } from '../../utils/utils';
 import { TagSelect, DateSelect } from '../common/select';
 import { MainApi } from '../../ApiService';
 import { Radio } from 'antd';
 import PhotoGallery from './PhotoGallery';
-import { Photo as IPhoto } from "../../models";
+import { Photo as IPhoto, Action as IAction, Location as ILocation, Pet as IPet } from "../../models";
 import SlideGallery from './SlideGallery';
 import { Tag } from "../common"
+import useFetch from '../../hooks/useFetch';
 
 const Container = styled.div`
 `;
@@ -47,9 +47,10 @@ const Gallery: React.FC = () => {
     const [photos, setPhotos] = useState<IPhoto[]>([])
     const [sort, setSort] = useState("asc");
 
-    const actionState = useActionState();
-    const locationState = useLocationState();
-    const petState = usePetState();
+    const api = MainApi.getInstance()
+    const pet = useFetch<IPet>([], api.getPets)
+    const action = useFetch<IAction>([], api.getActions)
+    const location = useFetch<ILocation>([], api.getLocations)
 
     const getPhotos = async (params: string) => {
         const api = MainApi.getInstance()
@@ -102,17 +103,20 @@ const Gallery: React.FC = () => {
                 <TagSelect
                     placeholder="Choose actions"
                     onChange={(data) => handleSelectedItemChange("actions", data)}
-                    options={actionState.items}
+                    options={action.data}
+                    loading={action.loading}
                 />
                 <TagSelect
                     placeholder="Choose locations"
                     onChange={(data) => handleSelectedItemChange("locations", data)}
-                    options={locationState.items}
+                    options={location.data}
+                    loading={location.loading}
                 />
                 <TagSelect
                     placeholder="Choose pets"
                     onChange={(data) => handleSelectedItemChange("pets", data)}
-                    options={petState.items}
+                    options={pet.data}
+                    loading={pet.loading}
                 />
             </SubContainer>
             <SubContainer>
