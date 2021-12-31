@@ -6,7 +6,6 @@ import { Header } from "./components/common/header"
 import { Footer } from "./components/common"
 import { HomeLayout, AdminLayout, MemberLayout } from "./layouts"
 
-import { LocationContextProvider, ActionContextProvider, PetContextProvider, PhotoContextProvider } from './contexts';
 import { ProtectedRoute } from './hoc';
 
 import { Provider } from 'react-redux'
@@ -17,13 +16,7 @@ import ScrollToTop from './hooks/ScrollToTop';
 const withProviders = <T,>(Component: React.ComponentType<T>) => {
   return (props: T) => (
     <Provider store={store}>
-      <PhotoContextProvider>
-        <LocationContextProvider>
-          <ActionContextProvider>
-              <Component {...props} />
-          </ActionContextProvider>
-        </LocationContextProvider>
-      </PhotoContextProvider>
+        <Component {...props} />
     </Provider>
   );
 }
