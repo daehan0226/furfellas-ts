@@ -116,11 +116,11 @@ const ActionFormList: React.FC = () => {
                 {actionState.items.map((action) => (
                     <>
                         {editKey === action.id ? (
-                            <ActionForm data={action} onFinish={finishForm} />
+                            <ActionForm data={action} onFinish={finishForm}  key={action.id} />
                         ) : (
-                            <List>
+                            <List key={action.id}>
                                 <DetailBox>
-                                    <p key={action.id}>{action.name}</p>
+                                    <p>{action.name}</p>
                                     <Buttons>
                                         <Button text={"Edit"} onClick={() => { setEditKey(action.id) }} />
                                         <PopUpDeleteButton id={action.id} name={action.name} confirmAction={handleDelete} />

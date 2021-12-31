@@ -7,12 +7,13 @@ import { Action as IAction } from "../../models";
 import { createQueryParams } from "../../utils/utils";
 import { Button, Input } from "../common"
 import { ErrMsgBox, Buttons } from "../../styles/common"
+import {themeProps} from "../../styles/theme"
 
 const Container = styled.div`
     margin: 10px;
     display: flex;
     
-    ${({ theme }) => theme.media.phone`    
+    ${({ theme }: themeProps) => theme.media.phone`    
         flex-direction: column;
     `}
 `;

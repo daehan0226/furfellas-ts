@@ -118,11 +118,11 @@ const LocationFormList: React.FC = () => {
                 {locationState.items.map((location) => (
                     <>
                         {editKey === location.id ? (
-                            <LocationForm data={location} onFinish={finishForm} />
+                            <LocationForm data={location} onFinish={finishForm} key={location.id} />
                         ) : (
-                            <List>
+                            <List key={location.id}>
                                 <DetailBox>
-                                    <p key={location.id}>{location.name}</p>
+                                    <p>{location.name}</p>
                                     <Buttons>
                                         <Button text={"Edit"} onClick={() => { setEditKey(location.id) }} />
                                         <PopUpDeleteButton id={location.id} name={location.name} confirmAction={handleDelete} />
