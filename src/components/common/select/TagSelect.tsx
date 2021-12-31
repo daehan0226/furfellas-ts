@@ -10,10 +10,11 @@ interface TagSelectProps {
     onChange: (value: number[]) => void,
     defaultValue?: number[],
     multipleSelect?: boolean,
+    loading? : boolean
 }
 
 
-const TagSelect: FC<TagSelectProps> = ({ placeholder, onChange, options, defaultValue = [], multipleSelect = true }) => {
+const TagSelect: FC<TagSelectProps> = ({ placeholder, onChange, options, defaultValue = [], multipleSelect = true, loading = false }) => {
 
     const handleChange = (value: any) => {
         onChange(value)
@@ -25,7 +26,7 @@ const TagSelect: FC<TagSelectProps> = ({ placeholder, onChange, options, default
             placeholder={placeholder}
             onChange={handleChange}
             defaultValue={defaultValue}
-
+            loading={loading}
         >
             {options.map(({ id, name, color }) => (
                 <Option key={`${id}-${name}`} value={id.toString()} style={{ color: `#${color}` }} >{name}</Option>
