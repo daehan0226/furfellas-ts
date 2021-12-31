@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { capitalizeFirstLetter } from '../utils';
 import { useActionState, useLocationState, usePetState, usePhotoState } from '../contexts';
 import { PhotoFormList } from '../components/gallery';
+import { PetContextProvider } from '../contexts';
 
 
 const Main = styled.main`
@@ -106,4 +107,13 @@ const AdminLayout: React.FC<RouteComponentProps> = (props) => {
     );
 }
 
-export default AdminLayout;
+
+const withProviders = <T,>(Component: React.ComponentType<T>) => {
+    return (props: T) => (
+        <PetContextProvider>
+            <Component {...props} />
+        </PetContextProvider>
+    );
+}
+
+export default withProviders(AdminLayout);

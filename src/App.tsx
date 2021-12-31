@@ -20,9 +20,7 @@ const withProviders = <T,>(Component: React.ComponentType<T>) => {
       <PhotoContextProvider>
         <LocationContextProvider>
           <ActionContextProvider>
-            <PetContextProvider>
               <Component {...props} />
-            </PetContextProvider>
           </ActionContextProvider>
         </LocationContextProvider>
       </PhotoContextProvider>
