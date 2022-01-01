@@ -10,6 +10,8 @@ import SlideGallery from './SlideGallery';
 import { Tag } from "../common"
 import useFetch from '../../hooks/useFetch';
 
+import { FileExcelOutlined } from '@ant-design/icons';
+
 const Container = styled.div`
 `;
 
@@ -23,13 +25,17 @@ const SubContainer = styled.div`
     }
 `;
 
-
 const ImageContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  min-height: 200px;
-  justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 200px;
+    justify-content: center;
 `;
+
+
+const EmptyContainer = styled.div`
+`;
+
 
 type IDisplayType = 'slide' | 'gallery'
 
@@ -88,13 +94,11 @@ const Gallery: React.FC = () => {
     }
 
     useEffect(() => {
-        let sorted = [];
         if (sort === "asc") {
-            sorted = photos.sort((a, b) => (a.create_datetime > b.create_datetime ? 1 : -1));
+            setPhotos([...photos.sort((a, b) => (a.create_datetime > b.create_datetime ? 1 : -1))])
         } else {
-            sorted = photos.sort((a, b) => (a.create_datetime < b.create_datetime ? 1 : -1));
+            setPhotos([...photos.sort((a, b) => (a.create_datetime < b.create_datetime ? 1 : -1))])
         }
-        setPhotos([...sorted]);
     }, [sort]);
 
     return (
@@ -145,13 +149,20 @@ const Gallery: React.FC = () => {
                     text={`From ${sort === 'asc' ? "old" : "new"} Photos`}
                 />
             </SubContainer>
-            <ImageContainer>
-                {displayType === 'slide' ? (
-                    <SlideGallery items={photos} />
-                ) : (
-                    <PhotoGallery items={photos} />
-                )}
-            </ImageContainer>
+            {photos.length > 0 ? (
+                <ImageContainer>
+                    {displayType === 'slide' ? (
+                        <SlideGallery items={photos} />
+                    ) : (
+                        <PhotoGallery items={photos} />
+                    )}
+                </ImageContainer>
+            ) : (
+                <EmptyContainer>  
+                    <FileExcelOutlined />
+                    <p>No photos</p>
+                </EmptyContainer>
+            )}
         </Container>
     );
 };
