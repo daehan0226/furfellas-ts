@@ -1,5 +1,7 @@
 
-import media from "./media"
+import media, {sizes, BackQuoteArgs} from "./media"
+import { CSSProp } from "styled-components";
+
 
 interface colorProps {
   primary: {
@@ -35,7 +37,18 @@ const colors: colorProps = {
   }
 }
 
-export const theme = {
+interface Props {
+  colors: colorProps,
+  media: Record<keyof typeof sizes, (l: TemplateStringsArray, ...p: BackQuoteArgs) => CSSProp
+>
+}
+
+export interface themeProps {
+  theme: Props
+}
+
+
+export const theme: Props = {
   colors,
   media,
 };

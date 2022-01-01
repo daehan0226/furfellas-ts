@@ -16,6 +16,14 @@ export const getCurrentStringDate = (): string => {
 }
 
 
+export const getCurrentStringDatetime = () => {
+    const today = new Date();
+    const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+    const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    return date + 'T' + time;
+}
+
+
 export const addMonthToCurrentDate = (months: number): Date => {
     const today = new Date();
     const d = today.getDate();
@@ -49,4 +57,10 @@ export const getParameterByName = (name: string, url: string) => {
 
 export const capitalizeFirstLetter = (str: string) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+
+export const changeToDisplayStringDatetime = (datetime: string) => {
+    let temp = datetime.replace("T", " ")
+    return temp.includes("00:00:00") ? temp.replace("00:00:00", "") : temp;
 }

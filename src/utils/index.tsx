@@ -5,6 +5,8 @@ import {
     strfDatetime,
     getParameterByName,
     capitalizeFirstLetter,
+    getCurrentStringDatetime,
+    changeToDisplayStringDatetime,
 } from "./utils";
 import { saveToken, deleteToken } from "./auth";
 
@@ -16,5 +18,7 @@ export {
     saveToken,
     deleteToken,
     getParameterByName,
-    capitalizeFirstLetter
+    capitalizeFirstLetter,
+    getCurrentStringDatetime,
+    changeToDisplayStringDatetime,
 }
