@@ -20,12 +20,6 @@ export interface ValidateSessionResponse extends IResponse {
     }
 };
 
-export interface DeleteSessionResponse extends IResponse {
-    data: {
-        message: string;
-    }
-}
-
 export interface GetActionResponse extends IResponse {
     data: {
         result: Action[];
@@ -33,24 +27,18 @@ export interface GetActionResponse extends IResponse {
     }
 }
 
-export interface AddActionResponse extends IResponse {
+export interface AddResponse extends IResponse {
     data: {
         result: number;
         message: string;
     }
 };
 
-export interface UpdateActionResponse extends IResponse {
+export interface UpdateResponse extends IResponse {
     data: {
         message: string;
     }
 };
-
-export interface DeleteActionResponse extends IResponse {
-    data: {
-        message: string;
-    }
-}
 
 export interface GetLocationResponse extends IResponse {
     data: {
@@ -59,25 +47,11 @@ export interface GetLocationResponse extends IResponse {
     }
 };
 
-export interface AddLocationResponse extends IResponse {
-    data: {
-        result: number;
-        message: string;
-    }
-};
-
-export interface UpdateLocationResponse extends IResponse {
-    data: {
-        message: string;
-    }
-};
-
-export interface DeleteLocationResponse extends IResponse {
+export interface DeleteResponse extends IResponse {
     data: {
         message: string;
     }
 }
-
 
 export interface GetPetResponse extends IResponse {
     data: {
@@ -120,26 +94,27 @@ class MainApi extends HttpClient {
     }
 
     public getPhotos = (queryParams: string) => this.instance.get<any, GetPhotoResponse>(`photos/?${queryParams}`);
-    public addPhoto = (data: any) => this.instance.post<any, AddActionResponse>(`photos/?${this._createQueryParams(data)}`);
-    public updatePhoto = (id: number, data: any) => this.instance.put<any, UpdateActionResponse>(`photos/${id}?${this._createQueryParams(data)}`);
-    public deletePhoto = (id: number) => this.instance.delete<any, DeleteActionResponse>(`photos/${id}`);
+    public addPhoto = (data: any) => this.instance.post<any, AddResponse>(`photos/?${this._createQueryParams(data)}`);
+    public updatePhoto = (id: number, data: any) => this.instance.put<any, UpdateResponse>(`photos/${id}?${this._createQueryParams(data)}`);
+    public deletePhoto = (id: number) => this.instance.delete<any, DeleteResponse>(`photos/${id}`);
 
     public addSession = (data: { username: string, password: string }) => this.instance.post<any, AddSessionResponse>(`sessions/`, data);
     public validateSession = () => this.instance.get<any, ValidateSessionResponse>(`sessions/validate`);
-    public deleteSession = () => this.instance.delete<any, ValidateSessionResponse>(`sessions/`);
+    public deleteSession = () => this.instance.delete<any, DeleteResponse>(`sessions/`);
 
     public getLocations = () => this.instance.get<any, GetLocationResponse>('locations/');
-    public addLocation = (queryParams: string) => this.instance.post<any, AddLocationResponse>(`locations/?${queryParams}`);
-    public updateLocation = (id: number, queryParams: string) => this.instance.put<any, UpdateLocationResponse>(`locations/${id}?${queryParams}`);
-    public deleteLocation = (id: number) => this.instance.delete<any, DeleteLocationResponse>(`locations/${id}`);
+    public addLocation = (queryParams: string) => this.instance.post<any, AddResponse>(`locations/?${queryParams}`);
+    public updateLocation = (id: number, queryParams: string) => this.instance.put<any, UpdateResponse>(`locations/${id}?${queryParams}`);
+    public deleteLocation = (id: number) => this.instance.delete<any, DeleteResponse>(`locations/${id}`);
 
     public getActions = () => this.instance.get<any, GetActionResponse>('actions/');
-    public addAction = (queryParams: string) => this.instance.post<any, AddActionResponse>(`actions/?${queryParams}`);
-    public updateAction = (id: number, queryParams: string) => this.instance.put<any, UpdateActionResponse>(`actions/${id}?${queryParams}`);
-    public deleteAction = (id: number) => this.instance.delete<any, DeleteActionResponse>(`actions/${id}`);
+    public addAction = (queryParams: string) => this.instance.post<any, AddResponse>(`actions/?${queryParams}`);
+    public updateAction = (id: number, queryParams: string) => this.instance.put<any, UpdateResponse>(`actions/${id}?${queryParams}`);
+    public deleteAction = (id: number) => this.instance.delete<any, DeleteResponse>(`actions/${id}`);
 
     public getPets = () => this.instance.get<any, GetPetResponse>('pets/');
-    public getPet = (id: string) => this.instance.get<Pet>(`pets/${id}`);
+    public getPet = (id: number) => this.instance.get<Pet>(`pets/${id}`);
+    public deletePet = (id: number) => this.instance.delete<any, DeleteResponse>(`pets/${id}`);
 
     public getTodos = (queryParams: string) => this.instance.get<any, GetTodoResponse>(`todos/?${queryParams}`);
 }

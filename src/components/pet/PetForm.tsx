@@ -10,6 +10,7 @@ import {
     Select,
     Avatar,
 } from 'antd';
+import { usePhotoState } from '../../contexts';
 
 
 interface PetFormProps {
@@ -19,7 +20,7 @@ interface PetFormProps {
 
 const PetForm: React.FC<PetFormProps> = ({ data, setFormValues }) => {
     const [form] = Form.useForm();
-    const [photoOptions, setPhotoOptions] = useState([]);
+    const photoState = usePhotoState();
 
     useEffect(() => {
         form.setFieldsValue({ ...data })
@@ -50,14 +51,13 @@ const PetForm: React.FC<PetFormProps> = ({ data, setFormValues }) => {
                 <Form.Item name="intro" label="Introdction">
                     <Input />
                 </Form.Item>
-                {/* <Form.Item label="Image" name="photoid">
-                    <Select size="large" > */}
-                {/* <Select.Option value={null}>Pick from photos</Select.Option>
-                        {photoOptions.map(option => (
+                <Form.Item label="Image" name="photoid">
+                    <Select size="large">
+                        {photoState.items.map(option => (
                             <Select.Option key={option.id} value={option.id}><Avatar src={option.thumbnail} size={64} /></Select.Option>
-                        ))} */}
-                {/* </Select>
-                </Form.Item> */}
+                        ))}
+                    </Select>
+                </Form.Item>
                 <Form.Item label="Birthday" name="birthday">
                     <DatePicker />
                 </Form.Item>

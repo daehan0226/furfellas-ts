@@ -3,8 +3,11 @@ import { Modal, Button, List, Avatar } from 'antd';
 import moment from 'moment';
 import { PetForm } from "./";
 import styled from "styled-components";
-import { usePetState } from '../../contexts';
+import { usePetDispatch, usePetState } from '../../contexts';
 import { Pet as IPet } from "../../models"
+import { MainApi } from '../../ApiService';
+import { PopUpDeleteButton } from '../common';
+import request from "axios"
 
 const Container = styled.div`
     width: 90%;
@@ -47,6 +50,7 @@ const PetList = () => {
     const [editKey, setEditKey] = useState<number>(-1);
     const [pet, setPet] = useState<IPet>(initialValues);
     const petState = usePetState();
+    const petDispatch = usePetDispatch();
 
     const handleOk = () => {
         setIsModalVisible(false);
@@ -80,8 +84,18 @@ const PetList = () => {
         setIsModalVisible(true);
     };
 
-    const handleDelete = () => {
-        setIsModalVisible(false);
+    const handleDelete = async (id:number) => {
+        try {
+            const api = MainApi.getInstance()
+            const response = await api.deletePet(id)
+            if (response.status === 204) {
+                petDispatch({ type: 'DELETE', payload: { id } })
+            }
+        } catch (e) {
+            if (request.isAxiosError(e) && e.response) {
+                console.log(e.response.data.message)
+            }
+        }
     };
 
     return (
@@ -101,7 +115,7 @@ const PetList = () => {
                         />
                         <BtnBox>
                             <Button onClick={() => handleEdit(item.id)}>Edit </Button>
-                            <Button >Delete </Button>
+                            <PopUpDeleteButton id={item.id} name={item.name} confirmAction={()=>handleDelete(item.id)} />
                         </BtnBox>
                     </List.Item>
                 )}
