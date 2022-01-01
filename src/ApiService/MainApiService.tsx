@@ -1,5 +1,6 @@
 import HttpClient from './http-client';
 import { Pet, Todo, Action, Location, Photo } from '../models';
+import { createQueryParams } from '../utils/utils';
 
 export interface IResponse {
     status: 200 | 201 | 204 | 400 | 401 | 404 | 403 | 500,
@@ -114,8 +115,14 @@ class MainApi extends HttpClient {
         return this.classInstance;
     }
 
-    public getPets = () => this.instance.get<any, GetPetResponse>('pets/');
+    private _createQueryParams = (data:any) => {
+        return createQueryParams(data)
+    }
+
     public getPhotos = (queryParams: string) => this.instance.get<any, GetPhotoResponse>(`photos/?${queryParams}`);
+    public addPhoto = (data: any) => this.instance.post<any, AddActionResponse>(`photos/?${this._createQueryParams(data)}`);
+    public updatePhoto = (id: number, data: any) => this.instance.put<any, UpdateActionResponse>(`photos/${id}?${this._createQueryParams(data)}`);
+    public deletePhoto = (id: number) => this.instance.delete<any, DeleteActionResponse>(`photos/${id}`);
 
     public addSession = (data: { username: string, password: string }) => this.instance.post<any, AddSessionResponse>(`sessions/`, data);
     public validateSession = () => this.instance.get<any, ValidateSessionResponse>(`sessions/validate`);
@@ -131,6 +138,7 @@ class MainApi extends HttpClient {
     public updateAction = (id: number, queryParams: string) => this.instance.put<any, UpdateActionResponse>(`actions/${id}?${queryParams}`);
     public deleteAction = (id: number) => this.instance.delete<any, DeleteActionResponse>(`actions/${id}`);
 
+    public getPets = () => this.instance.get<any, GetPetResponse>('pets/');
     public getPet = (id: string) => this.instance.get<Pet>(`pets/${id}`);
 
     public getTodos = (queryParams: string) => this.instance.get<any, GetTodoResponse>(`todos/?${queryParams}`);
