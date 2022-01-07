@@ -206,17 +206,17 @@ const PhotoTable = () => {
             actions: selectedActionIds,
             location: selectedLocationId,
             description,
-            create_datetime:selectedDate,
+            create_datetime: selectedDate || getCurrentStringDatetime(),
         }
         try {
             setLoading(true)
             const api = MainApi.getInstance()
             if (editingKey === 0) {
-                await api.addPhoto(data)
+                await api.addPhoto({file, ...data})
             } else {
                 await api.updatePhoto(
                     editingKey,
-                    {file, ...data}
+                    data
                 )
             }
             setEditingKey(-1)

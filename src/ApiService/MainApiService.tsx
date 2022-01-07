@@ -89,13 +89,23 @@ class MainApi extends HttpClient {
         return this.classInstance;
     }
 
-    private _createQueryParams = (data:any) => {
-        return createQueryParams(data)
+    private _createPhotoFormData = (data: any) => {
+        let formData = new FormData();
+
+        if (data.file) {
+            formData.append("file", data.file);
+        }
+        formData.append("pet_ids", data.pets);
+        formData.append("action_ids", data.actions);
+        formData.append("location_id", data.location);
+        formData.append("description", data.description);
+        formData.append("create_datetime", data.create_datetime)
+        return formData
     }
 
     public getPhotos = (queryParams: string) => this.instance.get<any, GetPhotoResponse>(`photos/?${queryParams}`);
-    public addPhoto = (data: any) => this.instance.post<any, AddResponse>(`photos/?${this._createQueryParams(data)}`);
-    public updatePhoto = (id: number, data: any) => this.instance.put<any, UpdateResponse>(`photos/${id}?${this._createQueryParams(data)}`);
+    public addPhoto = (data: any) => this.instance.post<any, AddResponse>(`photos/`, this._createPhotoFormData(data));
+    public updatePhoto = (id: number, data: any) => this.instance.put<any, UpdateResponse>(`photos/${id}?${this._createPhotoFormData(data)}`);
     public deletePhoto = (id: number) => this.instance.delete<any, DeleteResponse>(`photos/${id}`);
 
     public addSession = (data: { username: string, password: string }) => this.instance.post<any, AddSessionResponse>(`sessions/`, data);
