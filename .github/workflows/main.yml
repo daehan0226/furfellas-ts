@@ -23,7 +23,7 @@ jobs:
         run: npm install
 
       - name: Build
-        run: npm run build
+        run: CI= npm run build
 
       - name: Deploy
         env:
@@ -33,4 +33,4 @@ jobs:
           aws s3 cp \
             --recursive \
             --region ap-northeast-2 \
-            ./out s3://furfellas.foxlee.kr
+            ./build s3://furfellas-ts.foxlee.kr
