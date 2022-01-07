@@ -1,6 +1,6 @@
 import React, { useState, useEffect, FC } from "react";
 import styled from "styled-components";
-import Button from "./Button";
+import { Button } from "./";
 
 const Container = styled.div`
   justify-content: flex-start;

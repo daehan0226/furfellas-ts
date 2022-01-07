@@ -1,27 +1,22 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import request from "axios";
-import { Popconfirm } from 'antd';
 import { MainApi } from "../../ApiService";
 import { useActionDispatch, useActionState } from "../../contexts";
 import { Action as IAction } from "../../models";
 import { createQueryParams } from "../../utils/utils";
 import { Button, Input } from "../common"
+import { ErrMsgBox, Buttons } from "../../styles/common"
+import {themeProps} from "../../styles/theme"
 
 const Container = styled.div`
-    margin: 10px auto;
-    width: 320px;
-`;
-
-const ErrorMsg = styled.span`
-    color: ${({ theme }) => theme.colors.common.error};
-`
-
-const Buttons = styled.div`
+    margin: 10px;
     display: flex;
-    margin-top: 10px;
-    justify-content: space-around;
-`
+    
+    ${({ theme }: themeProps) => theme.media.phone`    
+        flex-direction: column;
+    `}
+`;
 
 interface ActionFormProps {
     data: IAction,
@@ -68,23 +63,6 @@ const ActionForm: React.FC<ActionFormProps> = ({ data, onFinish }) => {
         }
     }
 
-    const handleDeleteAction = async (id: number) => {
-        try {
-            const api = MainApi.getInstance()
-            const response = await api.deleteAction(data.id)
-            if (response.status === 204) {
-                actionDispatch({ type: 'DELETE', payload: { id } })
-                return true
-            }
-
-        } catch (e) {
-            if (request.isAxiosError(e) && e.response) {
-                setErrMsg(e.response.data.message)
-                return false
-            }
-        }
-    }
-
     const handleSubmit = async () => {
         let result;
         if (data && data.id) {
@@ -101,12 +79,6 @@ const ActionForm: React.FC<ActionFormProps> = ({ data, onFinish }) => {
         onFinish()
     }
 
-    const handleDelete = async () => {
-        const result = await handleDeleteAction(data.id)
-        if (result) {
-            onFinish()
-        }
-    }
 
     const checkDuplicates = (newName: string) => {
         if (data.name === newName) {
@@ -137,29 +109,28 @@ const ActionForm: React.FC<ActionFormProps> = ({ data, onFinish }) => {
 
     }, [value, errMsg])
 
-
-    const DeleteButton = () => {
-        return (
-            <Popconfirm title={`Are you sure to delete ${data.name}？`} okText="Yes" onConfirm={handleDelete} cancelText="No">
-                <Button text={"Delete"} danger={true} />
-            </Popconfirm>
-        )
-    }
-
     return (
         <Container>
-            <Input value={value} onChange={e => setValue(e.target.value)} placeholder={data.name || "New location"} />
-            {errMsg && <ErrorMsg>{errMsg}</ErrorMsg>}
+            <Input
+                value={value}
+                onChange={e => setValue(e.target.value)}
+                placeholder={data.name || "New location"}
+                size={"small"}
+            />
+            {errMsg && <ErrMsgBox>{errMsg}</ErrMsgBox>}
             <Buttons>
-                {data.id === 0 ? (
-                    <Button text={"Add"} onClick={handleSubmit} disabled={submitDisabled} />
-                ) : (
-                    <>
-                        <Button text={"Update"} onClick={handleSubmit} disabled={submitDisabled} />
-                        <DeleteButton />
-                    </>
-                )}
-                <Button text={"Cancel"} type={"default"} onClick={handleCancel} />
+                <Button
+                    text={data.id === 0 ? "Add" : "Update"}
+                    onClick={handleSubmit}
+                    disabled={submitDisabled}
+                    size={"small"}
+                />
+                <Button
+                    text={"Cancel"}
+                    type={"default"}
+                    onClick={handleCancel}
+                    size={"small"}
+                />
             </Buttons>
         </Container>
     );

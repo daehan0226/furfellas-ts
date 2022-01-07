@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
-import { useActionState, useLocationState, usePetState } from '../../contexts';
 import { createQueryParams, getCurrentStringDate, strfDatetime, addMonthToCurrentDate } from '../../utils/utils';
 import { TagSelect, DateSelect } from '../common/select';
 import { MainApi } from '../../ApiService';
 import { Radio } from 'antd';
 import PhotoGallery from './PhotoGallery';
-import { Photo as IPhoto } from "../../models";
+import { Photo as IPhoto, Action as IAction, Location as ILocation, Pet as IPet } from "../../models";
 import SlideGallery from './SlideGallery';
 import { Tag } from "../common"
+import useFetch from '../../hooks/useFetch';
+
+import { FileExcelOutlined } from '@ant-design/icons';
 
 const Container = styled.div`
 `;
@@ -23,13 +25,17 @@ const SubContainer = styled.div`
     }
 `;
 
-
 const ImageContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  min-height: 200px;
-  justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 200px;
+    justify-content: center;
 `;
+
+
+const EmptyContainer = styled.div`
+`;
+
 
 type IDisplayType = 'slide' | 'gallery'
 
@@ -47,9 +53,10 @@ const Gallery: React.FC = () => {
     const [photos, setPhotos] = useState<IPhoto[]>([])
     const [sort, setSort] = useState("asc");
 
-    const actionState = useActionState();
-    const locationState = useLocationState();
-    const petState = usePetState();
+    const api = MainApi.getInstance()
+    const pet = useFetch<IPet>([], api.getPets)
+    const action = useFetch<IAction>([], api.getActions)
+    const location = useFetch<ILocation>([], api.getLocations)
 
     const getPhotos = async (params: string) => {
         const api = MainApi.getInstance()
@@ -87,13 +94,11 @@ const Gallery: React.FC = () => {
     }
 
     useEffect(() => {
-        let sorted = [];
         if (sort === "asc") {
-            sorted = photos.sort((a, b) => (a.create_datetime > b.create_datetime ? 1 : -1));
+            setPhotos([...photos.sort((a, b) => (a.create_datetime > b.create_datetime ? 1 : -1))])
         } else {
-            sorted = photos.sort((a, b) => (a.create_datetime < b.create_datetime ? 1 : -1));
+            setPhotos([...photos.sort((a, b) => (a.create_datetime < b.create_datetime ? 1 : -1))])
         }
-        setPhotos([...sorted]);
     }, [sort]);
 
     return (
@@ -102,17 +107,20 @@ const Gallery: React.FC = () => {
                 <TagSelect
                     placeholder="Choose actions"
                     onChange={(data) => handleSelectedItemChange("actions", data)}
-                    options={actionState.items}
+                    options={action.data}
+                    loading={action.loading}
                 />
                 <TagSelect
                     placeholder="Choose locations"
                     onChange={(data) => handleSelectedItemChange("locations", data)}
-                    options={locationState.items}
+                    options={location.data}
+                    loading={location.loading}
                 />
                 <TagSelect
                     placeholder="Choose pets"
                     onChange={(data) => handleSelectedItemChange("pets", data)}
-                    options={petState.items}
+                    options={pet.data}
+                    loading={pet.loading}
                 />
             </SubContainer>
             <SubContainer>
@@ -141,13 +149,20 @@ const Gallery: React.FC = () => {
                     text={`From ${sort === 'asc' ? "old" : "new"} Photos`}
                 />
             </SubContainer>
-            <ImageContainer>
-                {displayType === 'slide' ? (
-                    <SlideGallery items={photos} />
-                ) : (
-                    <PhotoGallery items={photos} />
-                )}
-            </ImageContainer>
+            {photos.length > 0 ? (
+                <ImageContainer>
+                    {displayType === 'slide' ? (
+                        <SlideGallery items={photos} />
+                    ) : (
+                        <PhotoGallery items={photos} />
+                    )}
+                </ImageContainer>
+            ) : (
+                <EmptyContainer>  
+                    <FileExcelOutlined />
+                    <p>No photos</p>
+                </EmptyContainer>
+            )}
         </Container>
     );
 };

@@ -2,11 +2,13 @@ import { useEffect, useState, FC } from "react";
 import { Table, Input, InputNumber, Popconfirm, Form, Typography, DatePicker, Button, Tag } from 'antd';
 import moment from "moment";
 import styled from "styled-components";
-import { useActionState, useLocationState, usePetState, usePhotoState } from "../../contexts";
+import { useActionState, useLocationState, usePetState, usePhotoDispatch, usePhotoState } from "../../contexts";
 import { changeToDisplayStringDatetime, getCurrentStringDatetime } from "../../utils";
 import { TagSelect } from "../common/select";
 import { Photo as IPhoto, PhotoTable as IPhotoTable, } from "../../models"
 import { InputFile } from "../common";
+import { MainApi } from "../../ApiService";
+import request from "axios";
 
 
 const Container = styled.section`
@@ -102,6 +104,8 @@ const PhotoTable = () => {
     const locationState = useLocationState();
     const petState = usePetState();
     const photoState = usePhotoState();
+    
+    const photoDispatch = usePhotoDispatch();
 
     const [selectedActionIds, setSelectedActionIds] = useState<Number[]>([]);
     const [selectedLocationId, setSelectedLocationId] = useState<String>('');
@@ -148,7 +152,21 @@ const PhotoTable = () => {
         setData([{ ...initialValues }, ...data])
     };
 
-    const handleDelete = () => {
+    const handleDelete = async (id:number) => {
+        setLoading(true)
+        try {
+            const api = MainApi.getInstance()
+            const response = await api.deletePhoto(id)
+            if (response.status === 204) {
+                photoDispatch({ type: 'DELETE', payload: { id } })
+                setEditingKey(-1)
+            }
+        } catch (e) {
+            if (request.isAxiosError(e) && e.response) {
+                console.log(e.response.data.message)
+            }
+        }
+        setLoading(false)
     };
 
     const onDatetimeChange = (_: any, dateString: string) => {
@@ -157,7 +175,6 @@ const PhotoTable = () => {
 
     useEffect(() => {
         setSaveOpen(false)
-        console.log(selectedActionIds, selectedLocationId, selectedPetIds)
         const validateSelects = () => {
             if (selectedLocationId === '') {
                 return false
@@ -182,33 +199,31 @@ const PhotoTable = () => {
     }, [selectedActionIds, selectedLocationId, selectedPetIds, editingKey, file])
 
 
-    const save = () => {
-        try {
-            const description = form.getFieldValue("description");
-            console.log(editingKey, description, selectedDate, selectedPetIds, selectedActionIds, selectedLocationId)
-            // setLoading(true)
-            // uploadService({
-            //     id,
-            //     file,
-            //     pets: selectedPetIds,
-            //     actions: selectedActionIds,
-            //     location: selectedLocationId,
-            //     description,
-            //     create_datetime,
-            //     successCallback: () => {
-            //         setEditingKey('');
-            //         setFile(null);
-            //         refreshTodos()
-            //         setLoading(false)
-            //     },
-            //     failCallback: () => {
-            //         setLoading(false)
-            //     },
-            // });
-
-        } catch (errInfo) {
-            console.log('Validate Failed:', errInfo);
+    const save = async () => {
+        const description = form.getFieldValue("description");
+        const data = {
+            pets: selectedPetIds,
+            actions: selectedActionIds,
+            location: selectedLocationId,
+            description,
+            create_datetime: selectedDate || getCurrentStringDatetime(),
         }
+        try {
+            setLoading(true)
+            const api = MainApi.getInstance()
+            if (editingKey === 0) {
+                await api.addPhoto({file, ...data})
+            } else {
+                await api.updatePhoto(
+                    editingKey,
+                    data
+                )
+            }
+            setEditingKey(-1)
+        } catch (e) {
+            console.log(e)
+        }
+        setLoading(false)
     };
 
     const columns = [
@@ -352,7 +367,7 @@ const PhotoTable = () => {
             width: '5%',
             render: (_: any, record: any) =>
                 data.length >= 1 ? (
-                    <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete()}>
+                    <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id)}>
                         <Typography.Link>Delete</Typography.Link>
                     </Popconfirm>
                 ) : null,

@@ -7,8 +7,9 @@ import styled from "styled-components";
 import { ProtectedRoute } from '../hoc';
 import { useEffect, useState } from 'react';
 import { capitalizeFirstLetter } from '../utils';
-import { useActionState, useLocationState, usePetState, usePhotoState } from '../contexts';
+import { useActionState, useLocationState, usePetState, usePhotoState, PhotoContextProvider } from '../contexts';
 import { PhotoFormList } from '../components/gallery';
+import { PetContextProvider, LocationContextProvider, ActionContextProvider } from '../contexts';
 
 
 const Main = styled.main`
@@ -106,4 +107,19 @@ const AdminLayout: React.FC<RouteComponentProps> = (props) => {
     );
 }
 
-export default AdminLayout;
+
+const withContextProviders = <T,>(Component: React.ComponentType<T>) => {
+    return (props: T) => (
+        <LocationContextProvider>
+          <ActionContextProvider>
+            <PetContextProvider>
+                <PhotoContextProvider>
+                    <Component {...props} />
+                </PhotoContextProvider>
+            </PetContextProvider>
+          </ActionContextProvider>
+        </LocationContextProvider>
+    );
+}
+
+export default withContextProviders(AdminLayout);
