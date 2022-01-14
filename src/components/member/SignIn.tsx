@@ -76,6 +76,7 @@ const SignIn: React.FC<WithLocatonState> = (props) => {
                 value={username}
                 onChange={(e) => { setUsername(e.target.value) }}
                 rules={[{ required: true, message: 'Please input your username!' }]}
+                autoFocus={true}
             />
             <Input
                 placeholder="password"
