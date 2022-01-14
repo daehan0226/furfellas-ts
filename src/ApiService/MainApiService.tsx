@@ -3,7 +3,7 @@ import { Pet, Todo, Action, Location, Photo } from '../models';
 import { createQueryParams } from '../utils/utils';
 
 export interface IResponse {
-    status: 200 | 201 | 204 | 400 | 401 | 404 | 403 | 500,
+    status: 200 | 201 | 202 | 204 | 400 | 401 | 404 | 403 | 500,
 }
 
 export interface AddSessionResponse extends IResponse {
