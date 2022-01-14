@@ -212,16 +212,23 @@ const PhotoTable = () => {
             setLoading(true)
             const api = MainApi.getInstance()
             if (editingKey === 0) {
-                await api.addPhoto({file, ...data})
+                const response = await api.addPhoto({file, ...data})
+                if (response.status === 202) {
+                    setEditingKey(-1)
+                }
             } else {
-                await api.updatePhoto(
+                const response = await api.updatePhoto(
                     editingKey,
                     data
                 )
+                if (response.status === 204) {
+                    setEditingKey(-1)
+                }
             }
-            setEditingKey(-1)
         } catch (e) {
-            console.log(e)
+            if (request.isAxiosError(e) && e.response) {
+                console.log(e.response.data.message)
+            }
         }
         setLoading(false)
     };
