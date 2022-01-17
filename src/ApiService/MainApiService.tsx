@@ -78,7 +78,7 @@ class MainApi extends HttpClient {
     private static classInstance?: MainApi;
 
     public constructor() {
-        super('http://localhost:8080/api/');
+        super("http://13.125.226.150:16999/api/");
     }
 
     public static getInstance() {
