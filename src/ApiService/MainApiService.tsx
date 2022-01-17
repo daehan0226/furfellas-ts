@@ -78,7 +78,7 @@ class MainApi extends HttpClient {
     private static classInstance?: MainApi;
 
     public constructor() {
-        super('http://13.125.226.150:16999/api/');
+        super('http://localhost:8080/api/');
     }
 
     public static getInstance() {
@@ -107,6 +107,8 @@ class MainApi extends HttpClient {
     public addPhoto = (data: any) => this.instance.post<any, AddResponse>(`photos/`, this._createPhotoFormData(data));
     public updatePhoto = (id: number, data: any) => this.instance.put<any, UpdateResponse>(`photos/${id}?${this._createPhotoFormData(data)}`);
     public deletePhoto = (id: number) => this.instance.delete<any, DeleteResponse>(`photos/${id}`);
+
+    public loginGoogleUser = (token: any) => this.instance.post<any, AddSessionResponse>(`oauth_users/`, {provider_type:"google"}, {headers:{Authorization:token}});
 
     public addSession = (data: { username: string, password: string }) => this.instance.post<any, AddSessionResponse>(`sessions/`, data);
     public validateSession = () => this.instance.get<any, ValidateSessionResponse>(`sessions/validate`);

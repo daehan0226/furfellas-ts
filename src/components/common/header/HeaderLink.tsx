@@ -36,9 +36,11 @@ const HeaderLink = () => {
                         <LinkText onClick={() => { deauthenticate() }}>Log out</LinkText>
                     </LinkList>
                 ) : (
-                    <Link to="/member/signin">
-                        <LinkText>Sign In</LinkText>
-                    </Link>
+                    <>
+                        <Link to="/member/signin">
+                            <LinkText>Sign In</LinkText>
+                        </Link>
+                    </>
                 )
             )}
         </LinkBox>

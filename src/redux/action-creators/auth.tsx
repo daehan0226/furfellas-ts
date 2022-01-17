@@ -1,4 +1,5 @@
 import axios, { AxiosError } from "axios";
+import Cookies from "universal-cookie";
 import { UserActionType } from "../action-types";
 import { Dispatch } from "redux";
 import { UserAction } from "../actions";
@@ -35,6 +36,35 @@ export const authenticate =
         }
     }
 
+    export const googleAuthenticate =
+    (token: any) => {
+        return async (dispatch: Dispatch<UserAction>) => {
+            dispatch({
+                type: UserActionType.AUTHENTICATE_REQUEST
+            });
+            try {
+                const api = MainApi.getInstance()
+                const response = await api.loginGoogleUser(token)
+                dispatch({
+                    type: UserActionType.AUTHENTICATE,
+                    payload: response.data.result
+                });
+                saveToken(response.data.result.session)
+            }
+            catch (err: AxiosError | unknown) {
+                let errMsg: string;
+                if (axios.isAxiosError(err)) {
+                    errMsg = err.response?.data.message
+                } else {
+                    errMsg = "Oops, something went wrong"
+                }
+                dispatch({
+                    type: UserActionType.AUTHENTICATE_FAIL,
+                    payload: errMsg,
+                });
+            }
+        }
+    }
 
 export const reauthenticate = () => {
     return async (dispatch: Dispatch<UserAction>) => {

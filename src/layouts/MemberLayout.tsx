@@ -1,7 +1,7 @@
 import React from "react";
 import { Route } from 'react-router-dom'
 import styled from "styled-components";
-import { SignIn, SignUp } from "../components/member";
+import { SignIn } from "../components/member";
 
 const Main = styled.main`
   width: 320px;
@@ -13,7 +13,6 @@ const Main = styled.main`
 function MemberLayout() {
     return (
         <Main>
-            <Route path="/member/signup" exact component={SignUp} />
             <Route path="/member/signin" exact component={SignIn} />
         </Main>
     );
