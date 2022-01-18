@@ -5,6 +5,7 @@ import App from './App';
 import { ThemeProvider } from 'styled-components';
 import GlobalStyle from "./styles/global-styles";
 import { theme } from "./styles/theme";
+import * as dotenv from "dotenv";
 
 
 ReactDOM.render(
