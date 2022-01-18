@@ -4,7 +4,7 @@ import './App.css';
 import './styles/styles.css';
 import { Header } from "./components/common/header"
 import { Footer } from "./components/common"
-import { HomeLayout, AdminLayout, MemberLayout } from "./layouts"
+import { HomeLayout, AdminLayout, MemberLayout, AccountLayout } from "./layouts"
 
 import { ProtectedRoute } from './hoc';
 
@@ -36,6 +36,7 @@ const App: React.FC = () => {
         <Switch>
           <Route path="/member" component={MemberLayout} />
           <ProtectedRoute path="/admin" component={AdminLayout} />
+          <ProtectedRoute path="/account" component={AccountLayout} />
           <Route path="/" component={HomeLayout} />
           <Redirect path="*" to="/" />
         </Switch>

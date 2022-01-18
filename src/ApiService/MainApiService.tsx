@@ -76,9 +76,9 @@ export interface GetPhotoResponse extends IResponse {
 
 class MainApi extends HttpClient {
     private static classInstance?: MainApi;
-
+    
     public constructor() {
-        super("http://13.125.226.150:16999/api/");
+        super(process.env.REACT_APP_API_ADDRESS);
     }
 
     public static getInstance() {
@@ -88,7 +88,7 @@ class MainApi extends HttpClient {
 
         return this.classInstance;
     }
-
+    
     private _createPhotoFormData = (data: any) => {
         let formData = new FormData();
 
