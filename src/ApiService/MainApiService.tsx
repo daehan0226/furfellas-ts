@@ -173,16 +173,16 @@ class MainApi extends HttpClient {
     this.instance.get<any, GetActionResponse>("actions/", {
       headers: this._getSession(),
     });
-  public addAction = (queryParams: string) =>
+  public addAction = (name: string) =>
     this.instance.post<any, AddResponse>(
-      `actions/?${queryParams}`,
-      {},
+      `actions/`,
+      { name },
       { headers: this._getSession() }
     );
-  public updateAction = (id: number, queryParams: string) =>
+  public updateAction = (id: number, name: string) =>
     this.instance.put<any, UpdateResponse>(
-      `actions/${id}?${queryParams}`,
-      {},
+      `actions/${id}`,
+      { name },
       { headers: this._getSession() }
     );
   public deleteAction = (id: number) =>
