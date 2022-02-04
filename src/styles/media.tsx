@@ -1,18 +1,18 @@
 import { CSSProp, css } from "styled-components";
 
-interface MediaQueryProps {
+export interface MediaQueryProps {
     phone: number;
     tablet: number;
     desktop: number;
-};
+}
 
-const sizes: MediaQueryProps = {
+export const sizes: MediaQueryProps = {
     desktop: 1167,
     tablet: 778,
     phone: 576,
 };
 
-type BackQuoteArgs = string[];
+export type BackQuoteArgs = string[];
 
 
 const media = {

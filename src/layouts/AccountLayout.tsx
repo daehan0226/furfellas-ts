@@ -1,21 +1,20 @@
 import React from "react";
 import { Route } from 'react-router-dom'
 import styled from "styled-components";
-import { SignIn } from "../components/member";
+import { AccountHome } from "../components/account";
 
 const Main = styled.main`
-  width: 320px;
   margin: 30px auto;
   min-height: 800px;
 `;
 
 
-function MemberLayout() {
+function AccountLayout() {
     return (
         <Main>
-            <Route path="/member/signin" exact component={SignIn} />
+            <Route path="/" exact component={AccountHome} />
         </Main>
     );
 }
 
-export default MemberLayout;
+export default AccountLayout;

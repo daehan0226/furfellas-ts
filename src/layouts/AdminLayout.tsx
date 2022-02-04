@@ -7,7 +7,9 @@ import styled from "styled-components";
 import { ProtectedRoute } from '../hoc';
 import { useEffect, useState } from 'react';
 import { capitalizeFirstLetter } from '../utils';
-import { useActionState, useLocationState, usePetState } from '../contexts';
+import { useActionState, useLocationState, usePetState, usePhotoState, PhotoContextProvider } from '../contexts';
+import { PhotoFormList } from '../components/gallery';
+import { PetContextProvider, LocationContextProvider, ActionContextProvider } from '../contexts';
 
 
 const Main = styled.main`
@@ -35,6 +37,7 @@ const Admin: React.FC<RouteComponentProps> = ({ match }) => {
     const actionState = useActionState();
     const locationState = useLocationState();
     const petState = usePetState();
+    const photoState = usePhotoState();
 
     const routes = [
         {
@@ -54,7 +57,7 @@ const Admin: React.FC<RouteComponentProps> = ({ match }) => {
         },
         {
             title: 'photo',
-            data: petState.items,
+            data: photoState.items,
             link: '/admin/photo'
         },
     ]
@@ -98,10 +101,25 @@ const AdminLayout: React.FC<RouteComponentProps> = (props) => {
             <ProtectedRoute exact path="/admin/action" component={Action} />
             <ProtectedRoute exact path="/admin/location" component={Location} />
             <ProtectedRoute exact path="/admin/pet" component={Pet} />
-            <ProtectedRoute exact path="/admin/photo" component={Pet} />
+            <ProtectedRoute exact path="/admin/photo" component={PhotoFormList} />
             <Redirect from="/admin" to="/admin" exact />
         </Main>
     );
 }
 
-export default AdminLayout;
+
+const withContextProviders = <T,>(Component: React.ComponentType<T>) => {
+    return (props: T) => (
+        <LocationContextProvider>
+          <ActionContextProvider>
+            <PetContextProvider>
+                <PhotoContextProvider>
+                    <Component {...props} />
+                </PhotoContextProvider>
+            </PetContextProvider>
+          </ActionContextProvider>
+        </LocationContextProvider>
+    );
+}
+
+export default withContextProviders(AdminLayout);
