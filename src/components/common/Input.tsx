@@ -33,7 +33,8 @@ const Input: React.FC<InputProps> = ({
     type = "text", 
     rules = [], 
     size = "middle",
-    enterKeyCallback = () => {}
+    enterKeyCallback = () => {},
+    autoFocus=false
 }) => {
     const [err, setErr] = useState<string>("");
     const [didMount, setDidMount] = useState<boolean>(false)
@@ -82,6 +83,7 @@ const Input: React.FC<InputProps> = ({
                 type={type}
                 size={size}
                 onPressEnter={handlePress}
+                autoFocus={autoFocus}
             />
             <ErrMsgBox>{err}</ErrMsgBox>
         </Container>

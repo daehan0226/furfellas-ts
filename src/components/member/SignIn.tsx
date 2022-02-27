@@ -3,7 +3,8 @@ import { RouteComponentProps } from 'react-router-dom';
 import { useActions } from '../../hooks/useActions';
 import { useAppSelector } from '../../hooks/useTypedSelector';
 import { Input, Button } from "../../components/common";
-import { message } from 'antd';
+import { message, Divider } from 'antd';
+import {GoogleLoginCompnent} from "./social";
 
 type LocationState = {
     nextPage?: string;
@@ -76,6 +77,7 @@ const SignIn: React.FC<WithLocatonState> = (props) => {
                 value={username}
                 onChange={(e) => { setUsername(e.target.value) }}
                 rules={[{ required: true, message: 'Please input your username!' }]}
+                autoFocus={true}
             />
             <Input
                 placeholder="password"
@@ -87,6 +89,8 @@ const SignIn: React.FC<WithLocatonState> = (props) => {
             />
             {err && (<p>{err}</p>)}
             <Button text={"Login"} onClick={handleSubmit} disabled={submitDisabled} loading={auth.loading} />
+            <Divider />
+            <GoogleLoginCompnent clientId = {"478378904599-hsv46g4ebvq10u19jfh1unjs7irghniq.apps.googleusercontent.com"} />
         </>
     )
 }

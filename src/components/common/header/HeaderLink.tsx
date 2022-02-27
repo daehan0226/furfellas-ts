@@ -32,13 +32,15 @@ const HeaderLink = () => {
             ) : (
                 auth.loggedIn && auth.data ? (
                     <LinkList>
-                        {auth.data.is_admin && <Link to="/admin"><LinkText>Admin</LinkText></Link>}
+                        {auth.data.is_admin === 1 && <Link to="/admin"><LinkText>Admin</LinkText></Link>}
+                        <Link to="/account"><LinkText>My page</LinkText></Link>
                         <LinkText onClick={() => { deauthenticate() }}>Log out</LinkText>
                     </LinkList>
                 ) : (
                     <Link to="/member/signin">
                         <LinkText>Sign In</LinkText>
                     </Link>
+                    
                 )
             )}
         </LinkBox>
