@@ -18,6 +18,11 @@ const DateContainer = styled.div`
   flex-wrap: wrap;
   margin: 10px 0px;
   align-items: center;
+  justify-content: flex-start;
+
+  ${({ theme }) => theme.media.phone`
+  justify-content: center;
+  `}
 `;
 
 const columns: any = [
