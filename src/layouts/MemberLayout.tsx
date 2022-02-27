@@ -1,5 +1,5 @@
 import React from "react";
-import { Route } from 'react-router-dom'
+import { Route } from "react-router-dom";
 import styled from "styled-components";
 import { SignIn } from "../components/member";
 
@@ -9,13 +9,12 @@ const Main = styled.main`
   min-height: 800px;
 `;
 
-
 function MemberLayout() {
-    return (
-        <Main>
-            <Route path="/member/signin" exact component={SignIn} />
-        </Main>
-    );
+  return (
+    <Main>
+      <Route path="/member/signin" exact component={SignIn} />
+    </Main>
+  );
 }
 
 export default MemberLayout;
